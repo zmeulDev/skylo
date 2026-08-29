@@ -83,7 +83,7 @@ void main() {
 
     expect(find.text('Cluj-Napoca'), findsOneWidget);
     expect(find.text('22'), findsOneWidget);
-    expect(find.text('°C'), findsOneWidget);
+    expect(find.text('°C'), findsWidgets);
     expect(find.text('CLEAR'), findsOneWidget);
     expect(find.text('FEELS 21°'), findsOneWidget);
     expect(find.text('Today'), findsOneWidget);

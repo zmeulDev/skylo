@@ -8,10 +8,15 @@ import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
 import 'package:skylo/domain/exceptions/location_permission_exception.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
+import 'package:skylo/presentation/providers/units_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
+import 'package:skylo/presentation/widgets/anim/entrance.dart';
+import 'package:skylo/presentation/widgets/anim/motion.dart';
+import 'package:skylo/presentation/widgets/day_detail_sheet.dart';
 import 'package:skylo/presentation/widgets/place_tabs.dart';
 import 'package:skylo/presentation/widgets/section_label.dart';
 import 'package:skylo/presentation/widgets/theme_toggle.dart';
+import 'package:skylo/presentation/widgets/units_toggle.dart';
 import 'package:skylo/presentation/widgets/weather_glyph.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -62,6 +67,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
+                const UnitsToggle(),
+                const SizedBox(width: 16),
                 const ThemeToggle(),
               ],
             ),
@@ -72,7 +79,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: places.length,
               onPageChanged: (i) => setState(() => _page = i),
               itemBuilder: (context, i) {
-                return _PlacePage(place: places[i]);
+                return AnimatedBuilder(
+                  animation: _pageController,
+                  builder: (context, child) {
+                    // Parallax: page shifts up to ±28px horizontally as it
+                    // leaves/enters during a swipe.
+                    double parallax = 0;
+                    if (_pageController.position.haveDimensions) {
+                      final page = _pageController.page ?? i.toDouble();
+                      parallax = (i - page) * 28;
+                    } else {
+                      parallax = (i - _page) * 28.0;
+                    }
+                    return Transform.translate(
+                      offset: Offset(parallax, 0),
+                      child: child,
+                    );
+                  },
+                  child: _PlacePage(place: places[i]),
+                );
               },
             ),
           ),
@@ -92,7 +117,7 @@ class _PlacePage extends ConsumerWidget {
     final weatherAsync = ref.watch(placeWeatherProvider(place));
 
     return weatherAsync.when(
-      loading: () => const _LoadingView(),
+      loading: () => const WeatherSkeleton(),
       error: (error, _) => _ErrorView(
         error: error,
         onRetry: () => ref.invalidate(placeWeatherProvider(place)),
@@ -103,25 +128,6 @@ class _PlacePage extends ConsumerWidget {
         onRemove: place.isCurrentLocation
             ? null
             : () => ref.read(savedPlacesProvider.notifier).remove(place.id),
-      ),
-    );
-  }
-}
-
-class _LoadingView extends StatelessWidget {
-  const _LoadingView();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 28,
-        height: 28,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: context.skylo.accent,
-          backgroundColor: context.skylo.hairline,
-        ),
       ),
     );
   }
@@ -150,21 +156,59 @@ class _WeatherContent extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(
                 32, compact ? 48 : 72, 32, compact ? 48 : 96),
             children: [
-              _Header(weather: weather, place: place, onRemove: onRemove),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 0,
+                child: _Header(weather: weather, place: place, onRemove: onRemove),
+              ),
               SizedBox(height: compact ? 56 : 88),
-              _CurrentBlock(weather: weather),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 1,
+                child: _CurrentBlock(weather: weather, animateKey: place.id),
+              ),
               SizedBox(height: compact ? 48 : 72),
-              const SectionLabel(text: 'Next 24 hours'),
-              const SizedBox(height: 20),
-              _HourlyTable(hourly: weather.hourly),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 2,
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SectionLabel(text: 'Next 24 hours'),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 3,
+                child: _HourlyTable(hourly: weather.hourly, animateKey: place.id),
+              ),
               SizedBox(height: compact ? 48 : 72),
-              const SectionLabel(text: '5-day outlook'),
-              const SizedBox(height: 12),
-              _DailyTable(daily: weather.daily),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 4,
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SectionLabel(text: '5-day outlook'),
+                    SizedBox(height: 12),
+                  ],
+                ),
+              ),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 5,
+                child: _DailyTable(daily: weather.daily),
+              ),
               SizedBox(height: compact ? 32 : 56),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text('KNOW YOUR SKY', style: AppText.tagline(context)),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 6,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text('KNOW YOUR SKY', style: AppText.tagline(context)),
+                ),
               ),
             ],
           ),
@@ -219,23 +263,28 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _CurrentBlock extends StatelessWidget {
+class _CurrentBlock extends ConsumerWidget {
   final WeatherEntity weather;
+  final Object animateKey;
 
-  const _CurrentBlock({required this.weather});
+  const _CurrentBlock({required this.weather, required this.animateKey});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final units = ref.watch(unitsProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${weather.currentTemp.round()}', style: AppText.display(context)),
+            CountUpTemp(
+              temp: units.convertTemp(weather.currentTemp),
+              animateKey: animateKey,
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 28),
-              child: Text('°C', style: AppText.degrees(context)),
+              child: Text(units.degreeLabel, style: AppText.degrees(context)),
             ),
           ],
         ),
@@ -254,7 +303,7 @@ class _CurrentBlock extends StatelessWidget {
             ),
             const SizedBox(width: 24),
             Text(
-              'FEELS ${weather.feelsLikeTemp.round()}°',
+              'FEELS ${units.convertTemp(weather.feelsLikeTemp).round()}°',
               style: AppText.tabular(context).copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -269,16 +318,18 @@ class _CurrentBlock extends StatelessWidget {
   }
 }
 
-class _HourlyTable extends StatelessWidget {
+class _HourlyTable extends ConsumerWidget {
   final List<HourlyForecast> hourly;
+  final Object animateKey;
 
-  const _HourlyTable({required this.hourly});
+  const _HourlyTable({required this.hourly, required this.animateKey});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (hourly.isEmpty) {
       return Text('No hourly data', style: AppText.body(context));
     }
+    final units = ref.watch(unitsProvider);
     final rows = hourly.take(8).toList();
     final minTemp = rows.map((r) => r.temp).reduce((a, b) => a < b ? a : b);
     final maxTemp = rows.map((r) => r.temp).reduce((a, b) => a > b ? a : b);
@@ -299,23 +350,25 @@ class _HourlyTable extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 36,
-                  child: WeatherGlyph(
-                    weatherCode: h.weatherCode,
-                    size: 18,
-                    accent: h.precipitationProbability >= 30,
+                  child: PulsingGlyph(
+                    enabled: h.precipitationProbability >= 30,
+                    child: WeatherGlyph(
+                      weatherCode: h.weatherCode,
+                      size: 18,
+                      accent: h.precipitationProbability >= 30,
+                    ),
                   ),
                 ),
                 Expanded(
-                  child: _TempBar(
-                    temp: h.temp,
-                    minTemp: minTemp,
-                    maxTemp: maxTemp,
+                  child: SweepingTempBar(
+                    fraction: _fraction(h.temp, minTemp, maxTemp),
+                    animateKey: animateKey,
                   ),
                 ),
                 SizedBox(
                   width: 48,
                   child: Text(
-                    '${h.temp.round()}°',
+                    '${units.convertTemp(h.temp).round()}°',
                     textAlign: TextAlign.right,
                     style: AppText.tabular(context),
                   ),
@@ -326,93 +379,77 @@ class _HourlyTable extends StatelessWidget {
       ],
     );
   }
-}
 
-class _TempBar extends StatelessWidget {
-  final double temp;
-  final double minTemp;
-  final double maxTemp;
-
-  const _TempBar({
-    required this.temp,
-    required this.minTemp,
-    required this.maxTemp,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  double _fraction(double temp, double minTemp, double maxTemp) {
     final range = (maxTemp - minTemp).clamp(1.0, double.infinity);
     final fraction = ((temp - minTemp) / range).clamp(0.0, 1.0);
-    return Container(
-      height: 2,
-      color: context.skylo.hairline,
-      child: FractionallySizedBox(
-        alignment: Alignment.centerLeft,
-        widthFactor: fraction == 0 ? 0.03 : fraction,
-        child: Container(color: context.skylo.ink),
-      ),
-    );
+    return fraction == 0 ? 0.03 : fraction;
   }
 }
 
-class _DailyTable extends StatelessWidget {
+class _DailyTable extends ConsumerWidget {
   final List<DailyForecast> daily;
 
   const _DailyTable({required this.daily});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (daily.isEmpty) {
       return Text('No daily data', style: AppText.body(context));
     }
+    final units = ref.watch(unitsProvider);
     final today = DateTime.now().day;
     return Column(
       children: [
         for (final day in daily)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    _dayLabel(day.date),
-                    style: AppText.body(context).copyWith(
-                      fontWeight:
-                          day.date.day == today ? FontWeight.w700 : null,
-                      color: day.date.day == today
-                          ? context.skylo.accent
-                          : null,
+          InkWell(
+            onTap: () =>
+                showDayDetailSheet(context, day, _dayLabel(day.date)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      _dayLabel(day.date),
+                      style: AppText.body(context).copyWith(
+                        fontWeight:
+                            day.date.day == today ? FontWeight.w700 : null,
+                        color: day.date.day == today
+                            ? context.skylo.accent
+                            : null,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 36,
-                  child: WeatherGlyph(
-                    weatherCode: day.weatherCode,
-                    size: 18,
-                    accent: day.weatherCode >= 300 && day.weatherCode < 600,
+                  SizedBox(
+                    width: 36,
+                    child: WeatherGlyph(
+                      weatherCode: day.weatherCode,
+                      size: 18,
+                      accent: day.weatherCode >= 300 && day.weatherCode < 600,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    '${day.minTemp.round()}°',
-                    textAlign: TextAlign.right,
-                    style: AppText.tabular(context)
-                        .copyWith(color: context.skylo.muted),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      '${units.convertTemp(day.minTemp).round()}°',
+                      textAlign: TextAlign.right,
+                      style: AppText.tabular(context)
+                          .copyWith(color: context.skylo.muted),
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    '${day.maxTemp.round()}°',
-                    textAlign: TextAlign.right,
-                    style: AppText.tabular(context)
-                        .copyWith(fontWeight: FontWeight.w700),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      '${units.convertTemp(day.maxTemp).round()}°',
+                      textAlign: TextAlign.right,
+                      style: AppText.tabular(context)
+                          .copyWith(fontWeight: FontWeight.w700),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
       ],

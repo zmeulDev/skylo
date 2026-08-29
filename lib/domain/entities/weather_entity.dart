@@ -19,4 +19,29 @@ class WeatherEntity {
     required this.hourly,
     required this.daily,
   });
+
+  double tempIn(WeatherUnits units) =>
+      units.convertTemp(currentTemp);
+
+  double feelsLikeIn(WeatherUnits units) =>
+      units.convertTemp(feelsLikeTemp);
+}
+
+enum WeatherUnits { metric, imperial }
+
+extension WeatherUnitsX on WeatherUnits {
+  double convertTemp(double celsius) => switch (this) {
+        WeatherUnits.metric => celsius,
+        WeatherUnits.imperial => celsius * 9 / 5 + 32,
+      };
+
+  String get degreeLabel => switch (this) {
+        WeatherUnits.metric => '°C',
+        WeatherUnits.imperial => '°F',
+      };
+
+  String get name => switch (this) {
+        WeatherUnits.metric => 'Metric (°C)',
+        WeatherUnits.imperial => 'Imperial (°F)',
+      };
 }

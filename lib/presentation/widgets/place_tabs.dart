@@ -4,9 +4,9 @@ import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
 
-/// Minimal place tabs: ALL CAPS labels, active in ink with red underline,
-/// inactive in muted. Underline is 2px, 24px wide.
-class PlaceTabs extends StatelessWidget {
+/// Minimal place tabs: ALL CAPS labels, active in ink, inactive in muted.
+/// The 2px red underline physically slides between tabs.
+class PlaceTabs extends StatefulWidget {
   final List<SavedPlace> places;
   final int index;
   final ValueChanged<int> onTap;
@@ -19,40 +19,75 @@ class PlaceTabs extends StatelessWidget {
   });
 
   @override
+  State<PlaceTabs> createState() => _PlaceTabsState();
+}
+
+class _PlaceTabsState extends State<PlaceTabs> {
+  final Map<int, GlobalKey> _keys = {};
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 36,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: places.length + 1,
-        separatorBuilder: (_, _) => const SizedBox(width: 28),
-        itemBuilder: (context, i) {
-          if (i == places.length) return const _AddTab();
-          final place = places[i];
-          final active = i == index;
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => onTap(i),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  place.label.toUpperCase(),
-                  style: AppText.label(context).copyWith(
-                    fontSize: 13,
-                    letterSpacing: 1.2,
-                    color: active ? context.skylo.ink : context.skylo.muted,
-                    fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  width: 24,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Measure tab widths so the indicator can slide between them.
+          final widths = <int, double>{};
+          for (var i = 0; i < widget.places.length + 1; i++) {
+            final key = _keys.putIfAbsent(i, () => GlobalKey());
+            final ctx = key.currentContext;
+            var w = 60.0;
+            if (ctx != null) {
+              final box = ctx.findRenderObject() as RenderBox?;
+              if (box != null && box.hasSize) w = box.size.width;
+            }
+            widths[i] = w;
+          }
+          // Left offset of the active tab's indicator.
+          var activeLeft = 0.0;
+          var activeWidth = 0.0;
+          var seen = 0.0;
+          for (var i = 0; i < widths.length; i++) {
+            if (i == widget.index) {
+              activeLeft = seen;
+              activeWidth = widths[i]!;
+              break;
+            }
+            seen += widths[i]! + 28;
+          }
+          return Stack(
+            children: [
+              ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.places.length + 1,
+                separatorBuilder: (_, _) => const SizedBox(width: 28),
+                itemBuilder: (context, i) {
+                  if (i == widget.places.length) {
+                    return _AddTab(key: _keys[i]);
+                  }
+                  final place = widget.places[i];
+                  final active = i == widget.index;
+                  return _Tab(
+                    key: _keys[i],
+                    label: place.label.toUpperCase(),
+                    active: active,
+                    onTap: () => widget.onTap(i),
+                  );
+                },
+              ),
+              Positioned(
+                left: activeLeft,
+                width: activeWidth,
+                bottom: 0,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutCubic,
+                  alignment: Alignment.center,
                   height: 2,
-                  color: active ? context.skylo.accent : Colors.transparent,
+                  child: Container(width: 24, color: context.skylo.accent),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
@@ -60,8 +95,45 @@ class PlaceTabs extends StatelessWidget {
   }
 }
 
+class _Tab extends StatelessWidget {
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
+  const _Tab({
+    super.key,
+    required this.label,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: AppText.label(context).copyWith(
+              fontSize: 13,
+              letterSpacing: 1.2,
+              color: active ? context.skylo.ink : context.skylo.muted,
+              fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Container(width: 24, height: 2, color: Colors.transparent),
+        ],
+      ),
+    );
+  }
+}
+
 class _AddTab extends StatelessWidget {
-  const _AddTab();
+  const _AddTab({super.key});
 
   @override
   Widget build(BuildContext context) {
