@@ -16,7 +16,6 @@ import 'package:skylo/presentation/widgets/day_detail_sheet.dart';
 import 'package:skylo/presentation/widgets/place_tabs.dart';
 import 'package:skylo/presentation/widgets/section_label.dart';
 import 'package:skylo/presentation/widgets/theme_toggle.dart';
-import 'package:skylo/presentation/widgets/units_toggle.dart';
 import 'package:skylo/presentation/widgets/weather_glyph.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -68,8 +67,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  const UnitsToggle(),
                   const SizedBox(width: 16),
                   const ThemeToggle(),
                 ],

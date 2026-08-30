@@ -10,7 +10,6 @@ import 'package:skylo/main.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/providers/weather_providers.dart';
 import 'package:skylo/presentation/widgets/theme_toggle.dart';
-import 'package:skylo/presentation/widgets/units_toggle.dart';
 
 class _AnimFakeRepo implements WeatherRepository {
   @override
@@ -77,6 +76,11 @@ Future<void> _pumpApp(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> _openSettings(WidgetTester tester) async {
+  await tester.tap(find.byType(ThemeToggle));
+  await tester.pumpAndSettle();
+}
+
 void main() {
   testWidgets('Temperature count-up animates on unit switch',
       (WidgetTester tester) async {
@@ -85,16 +89,15 @@ void main() {
     // Hero shows 22 (metric) once the initial count-up settles.
     expect(find.text('22'), findsOneWidget);
 
-    // Tap the °C units toggle.
-    final unitsToggleC = find.descendant(
-      of: find.byType(UnitsToggle),
-      matching: find.text('°C'),
-    );
-    await tester.tap(unitsToggleC);
+    await _openSettings(tester);
+    expect(find.text('SETTINGS'), findsOneWidget);
+
+    // Tap the Units row.
+    await tester.tap(find.text('Units'));
     await tester.pump(); // frame of the tap
     await tester.pump(const Duration(milliseconds: 150));
 
-    // Mid-animation: the hero must NOT have snapped to the final 72.
+    // Sheet closes instantly; count-up must still be running at 150ms.
     expect(find.text('72'), findsNothing,
         reason: 'count-up should still be running at 150ms');
 
@@ -102,16 +105,13 @@ void main() {
     expect(find.text('72'), findsOneWidget);
   });
 
-  testWidgets('Theme toggle delays the switch behind the ink-reveal',
+  testWidgets('Theme switch from settings sheet runs behind the ink-reveal',
       (WidgetTester tester) async {
     await _pumpApp(tester);
 
-    // First launch: system default. Toggle must interpret the platform
-    // brightness, not assume light.
-    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
-    expect(app.themeMode, ThemeMode.system);
-
-    await tester.tap(find.byType(ThemeToggle));
+    await _openSettings(tester);
+    // The theme row is labeled 'Theme' with the current state as trailing.
+    await tester.tap(find.text('Theme'));
     await tester.pump(const Duration(milliseconds: 100));
 
     // Mask expands first; theme must not have swapped yet (340ms).
@@ -121,12 +121,20 @@ void main() {
 
     await tester.pumpAndSettle();
     final endApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-    // After the first toggle the mode is explicit (stored), and must be
-    // the OPPOSITE of the platform brightness.
     final platformDark =
         WidgetsBinding.instance.platformDispatcher.platformBrightness ==
             Brightness.dark;
-    expect(endApp.themeMode,
-        platformDark ? ThemeMode.light : ThemeMode.dark);
+    expect(
+        endApp.themeMode, platformDark ? ThemeMode.light : ThemeMode.dark);
+  });
+
+  testWidgets('Settings sheet shows theme state and units state',
+      (WidgetTester tester) async {
+    await _pumpApp(tester);
+
+    await _openSettings(tester);
+    expect(find.text('SETTINGS'), findsOneWidget);
+    expect(find.text('Units'), findsOneWidget);
+    expect(find.text('°C'), findsWidgets);
   });
 }
