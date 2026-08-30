@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Доступ к геолокации отключён для Skylo. Включите его в Настройках системы → Конфиденциальность и безопасность → Службы геолокации.",
   "apiKeyInvalid": "OpenWeatherMap отклонил ключ API (401). Проверьте, действителен ли ключ.",
   "rateLimited": "Превышен лимит OpenWeatherMap. Попробуйте через минуту.",
-  "networkError": "Не удалось связаться с OpenWeatherMap. Проверьте подключение."
+  "networkError": "Не удалось связаться с OpenWeatherMap. Проверьте подключение.",
+  "alertThunderstorm": "ОЖИДАЕТСЯ ГРОЗА",
+  "alertSnow": "ОЖИДАЕТСЯ СНЕГ",
+  "alertRain": "ОЖИДАЕТСЯ ДОЖДЬ",
+  "alertWindGust": "СИЛЬНЫЕ ПОРЫВЫ ВЕТРА",
+  "alertHeat": "ЖАРА",
+  "alertCold": "СИЛЬНЫЙ МОРОЗ",
+  "alertFog": "ОЖИДАЕТСЯ ТУМАН",
+  "alertUv": "ВЫСОКИЙ УФ-ИНДЕКС",
+  "alertAirQuality": "ПЛОХОЕ КАЧЕСТВО ВОЗДУХА"
 }

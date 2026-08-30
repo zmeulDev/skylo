@@ -125,4 +125,31 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get networkError =>
       'Не удалось связаться с OpenWeatherMap. Проверьте подключение.';
+
+  @override
+  String get alertThunderstorm => 'ОЖИДАЕТСЯ ГРОЗА';
+
+  @override
+  String get alertSnow => 'ОЖИДАЕТСЯ СНЕГ';
+
+  @override
+  String get alertRain => 'ОЖИДАЕТСЯ ДОЖДЬ';
+
+  @override
+  String get alertWindGust => 'СИЛЬНЫЕ ПОРЫВЫ ВЕТРА';
+
+  @override
+  String get alertHeat => 'ЖАРА';
+
+  @override
+  String get alertCold => 'СИЛЬНЫЙ МОРОЗ';
+
+  @override
+  String get alertFog => 'ОЖИДАЕТСЯ ТУМАН';
+
+  @override
+  String get alertUv => 'ВЫСОКИЙ УФ-ИНДЕКС';
+
+  @override
+  String get alertAirQuality => 'ПЛОХОЕ КАЧЕСТВО ВОЗДУХА';
 }

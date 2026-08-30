@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Der Standortzugriff für Skylo ist deaktiviert. Aktiviere ihn unter Systemeinstellungen → Datenschutz & Sicherheit → Standortdienste.",
   "apiKeyInvalid": "OpenWeatherMap hat den API-Schlüssel abgelehnt (401). Prüfe, ob der Schlüssel gültig ist.",
   "rateLimited": "OpenWeatherMap-Limit überschritten. Versuche es in einer Minute erneut.",
-  "networkError": "OpenWeatherMap konnte nicht erreicht werden. Prüfe deine Verbindung."
+  "networkError": "OpenWeatherMap konnte nicht erreicht werden. Prüfe deine Verbindung.",
+  "alertThunderstorm": "GEWITTER ERWARTET",
+  "alertSnow": "SCHNEE ERWARTET",
+  "alertRain": "REGEN ERWARTET",
+  "alertWindGust": "STARKE BÖEN",
+  "alertHeat": "HITZEWARTE",
+  "alertCold": "EXTREME KÄLTE",
+  "alertFog": "NEBEL ERWARTET",
+  "alertUv": "HOHER UV-INDEX",
+  "alertAirQuality": "SCHLECHTE LUFTQUALITÄT"
 }

@@ -16,6 +16,8 @@ class WeatherModel extends WeatherEntity {
     super.timeZoneOffsetSeconds,
     required super.hourly,
     required super.daily,
+    super.lat,
+    super.lon,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,10 @@ class WeatherModel extends WeatherEntity {
               weatherCode: ((raw['weather'] as List<dynamic>).first['id'] as num).toInt(),
               precipitationProbability:
                   ((raw['pop'] as num?) ?? 0).toDouble() * 100,
+              windGust: (((raw['wind'] as Map<String, dynamic>?)?['gust']
+                      as num?) ??
+                  (raw['gust'] as num?))
+                  ?.toDouble(),
             ))
         .toList();
 
@@ -81,6 +87,8 @@ class WeatherModel extends WeatherEntity {
       timeZoneOffsetSeconds: tzOffset,
       hourly: hourly,
       daily: daily,
+      lat: (json['lat'] as num?)?.toDouble(),
+      lon: (json['lon'] as num?)?.toDouble(),
     );
   }
 

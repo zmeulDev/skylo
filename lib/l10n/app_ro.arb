@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Accesul la locație este dezactivat pentru Skylo. Activează-l în Setări sistem → Confidențialitate și securitate → Servicii de locație.",
   "apiKeyInvalid": "OpenWeatherMap a respins cheia API (401). Verifică dacă cheia este validă.",
   "rateLimited": "Limita de solicitări OpenWeatherMap a fost atinsă. Încearcă din nou într-un minut.",
-  "networkError": "Nu s-a putut contacta OpenWeatherMap. Verifică conexiunea."
+  "networkError": "Nu s-a putut contacta OpenWeatherMap. Verifică conexiunea.",
+  "alertThunderstorm": "SE AȘTEAPTĂ FURTUNĂ",
+  "alertSnow": "SE AȘTEAPTĂ NINDEARE",
+  "alertRain": "SE AȘTEAPTĂ PLOAIE",
+  "alertWindGust": "RAFALE PUTERNICE",
+  "alertHeat": "CANICULĂ",
+  "alertCold": "FRIG EXTREM",
+  "alertFog": "SE AȘTEAPTĂ CEAȚĂ",
+  "alertUv": "INDICE UV RIDICAT",
+  "alertAirQuality": "AER SLAB CALITATIV"
 }

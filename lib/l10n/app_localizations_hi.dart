@@ -125,4 +125,31 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get networkError =>
       'OpenWeatherMap से संपर्क नहीं हो सका। अपना कनेक्शन जांचें।';
+
+  @override
+  String get alertThunderstorm => 'आंधी-तूफ़ान संभव';
+
+  @override
+  String get alertSnow => 'बर्फ़बारी संभव';
+
+  @override
+  String get alertRain => 'बारिश संभव';
+
+  @override
+  String get alertWindGust => 'तेज़ हवाएँ';
+
+  @override
+  String get alertHeat => 'गर्मी का अलर्ट';
+
+  @override
+  String get alertCold => 'कड़ाके की ठंड';
+
+  @override
+  String get alertFog => 'कोहरा संभव';
+
+  @override
+  String get alertUv => 'यूवी सूचकांक अधिक';
+
+  @override
+  String get alertAirQuality => 'वायु गुणवत्ता खराब';
 }

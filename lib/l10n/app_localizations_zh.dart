@@ -121,4 +121,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get networkError => '无法连接 OpenWeatherMap。请检查网络连接。';
+
+  @override
+  String get alertThunderstorm => '预计有雷暴';
+
+  @override
+  String get alertSnow => '预计有降雪';
+
+  @override
+  String get alertRain => '预计有降雨';
+
+  @override
+  String get alertWindGust => '强阵风';
+
+  @override
+  String get alertHeat => '高温预警';
+
+  @override
+  String get alertCold => '严寒预警';
+
+  @override
+  String get alertFog => '预计有雾';
+
+  @override
+  String get alertUv => '紫外线强';
+
+  @override
+  String get alertAirQuality => '空气质量差';
 }

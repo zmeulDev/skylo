@@ -125,4 +125,31 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get networkError =>
       'OpenWeatherMap-এ পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।';
+
+  @override
+  String get alertThunderstorm => 'বজ্রঝড় সম্ভাব্য';
+
+  @override
+  String get alertSnow => 'তুষারপাত সম্ভাব্য';
+
+  @override
+  String get alertRain => 'বৃষ্টি সম্ভাব্য';
+
+  @override
+  String get alertWindGust => 'দমকা হাওয়া';
+
+  @override
+  String get alertHeat => 'গরম সতর্কতা';
+
+  @override
+  String get alertCold => 'তীব্র শীত';
+
+  @override
+  String get alertFog => 'কুয়াশা সম্ভাব্য';
+
+  @override
+  String get alertUv => 'ইউভি সূচক বেশি';
+
+  @override
+  String get alertAirQuality => 'বায়ুর গুণমান খারাপ';
 }

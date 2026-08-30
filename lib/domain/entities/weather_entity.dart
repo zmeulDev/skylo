@@ -11,6 +11,8 @@ class WeatherEntity {
   final int timeZoneOffsetSeconds;
   final List<HourlyForecast> hourly;
   final List<DailyForecast> daily;
+  final double? lat;
+  final double? lon;
 
   const WeatherEntity({
     required this.currentTemp,
@@ -22,6 +24,8 @@ class WeatherEntity {
     this.timeZoneOffsetSeconds = 0,
     required this.hourly,
     required this.daily,
+    this.lat,
+    this.lon,
   });
 
   double tempIn(WeatherUnits units) =>

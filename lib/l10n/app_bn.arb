@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Skylo-র লোকেশন অ্যাক্সেস বন্ধ। সিস্টেম সেটিংস → গোপনীয়তা ও নিরাপত্তা → লোকেশন পরিষেবা-তে চালু করুন।",
   "apiKeyInvalid": "OpenWeatherMap API কী প্রত্যাখ্যান করেছে (401)। কীটি বৈধ কিনা পরীক্ষা করুন।",
   "rateLimited": "OpenWeatherMap-এর সীমা ছাড়িয়ে গেছে। এক মিনিট পর আবার চেষ্টা করুন।",
-  "networkError": "OpenWeatherMap-এ পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।"
+  "networkError": "OpenWeatherMap-এ পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।",
+  "alertThunderstorm": "বজ্রঝড় সম্ভাব্য",
+  "alertSnow": "তুষারপাত সম্ভাব্য",
+  "alertRain": "বৃষ্টি সম্ভাব্য",
+  "alertWindGust": "দমকা হাওয়া",
+  "alertHeat": "গরম সতর্কতা",
+  "alertCold": "তীব্র শীত",
+  "alertFog": "কুয়াশা সম্ভাব্য",
+  "alertUv": "ইউভি সূচক বেশি",
+  "alertAirQuality": "বায়ুর গুণমান খারাপ"
 }

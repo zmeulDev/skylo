@@ -125,4 +125,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get networkError =>
       'Could not reach OpenWeatherMap. Check your connection.';
+
+  @override
+  String get alertThunderstorm => 'THUNDERSTORM EXPECTED';
+
+  @override
+  String get alertSnow => 'SNOW EXPECTED';
+
+  @override
+  String get alertRain => 'RAIN EXPECTED';
+
+  @override
+  String get alertWindGust => 'STRONG GUSTS EXPECTED';
+
+  @override
+  String get alertHeat => 'HEAT WATCH';
+
+  @override
+  String get alertCold => 'COLD WATCH';
+
+  @override
+  String get alertFog => 'FOG EXPECTED';
+
+  @override
+  String get alertUv => 'HIGH UV TODAY';
+
+  @override
+  String get alertAirQuality => 'POOR AIR QUALITY';
 }

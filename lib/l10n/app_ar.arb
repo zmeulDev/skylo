@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "تم تعطيل الوصول إلى الموقع لـ Skylo. فعّله من إعدادات النظام → الخصوصية والأمان → خدمات الموقع.",
   "apiKeyInvalid": "رفض OpenWeatherMap مفتاح API (401). تحقق من صحة المفتاح.",
   "rateLimited": "تم تجاوز حد OpenWeatherMap. حاول مجددًا بعد دقيقة.",
-  "networkError": "تعذر الوصول إلى OpenWeatherMap. تحقق من اتصالك."
+  "networkError": "تعذر الوصول إلى OpenWeatherMap. تحقق من اتصالك.",
+  "alertThunderstorm": "عاصفة رعدية متوقعة",
+  "alertSnow": "تساقط ثلوج متوقع",
+  "alertRain": "أمطار متوقعة",
+  "alertWindGust": "رياح شديدة",
+  "alertHeat": "موجة حرة",
+  "alertCold": "برد شديد",
+  "alertFog": "ضباب متوقع",
+  "alertUv": "مؤشر الأشعة فوق البنفسجية مرتفع",
+  "alertAirQuality": "جودة هواء رديئة"
 }

@@ -96,6 +96,7 @@ class OpenWeatherRemoteDataSource {
               'temp': (entry['main'] as Map<String, dynamic>)['temp'],
               'pop': entry['pop'] ?? 0,
               'weather': entry['weather'],
+              'wind': entry['wind'],
             })
         .toList();
 
@@ -149,6 +150,8 @@ class OpenWeatherRemoteDataSource {
     return {
       'timezone': current['name'],
       'timezone_offset': tzOffset,
+      'lat': (current['coord'] as Map<String, dynamic>?)?['lat'],
+      'lon': (current['coord'] as Map<String, dynamic>?)?['lon'],
       'current': {
         'dt': current['dt'],
         'temp': (current['main'] as Map<String, dynamic>)['temp'],

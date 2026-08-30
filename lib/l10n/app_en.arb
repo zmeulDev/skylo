@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Location access is disabled for Skylo. Enable it in System Settings → Privacy & Security → Location Services.",
   "apiKeyInvalid": "OpenWeatherMap rejected the API key (401). Check that the key is valid.",
   "rateLimited": "OpenWeatherMap rate limit exceeded. Try again in a minute.",
-  "networkError": "Could not reach OpenWeatherMap. Check your connection."
+  "networkError": "Could not reach OpenWeatherMap. Check your connection.",
+  "alertThunderstorm": "THUNDERSTORM EXPECTED",
+  "alertSnow": "SNOW EXPECTED",
+  "alertRain": "RAIN EXPECTED",
+  "alertWindGust": "STRONG GUSTS EXPECTED",
+  "alertHeat": "HEAT WATCH",
+  "alertCold": "COLD WATCH",
+  "alertFog": "FOG EXPECTED",
+  "alertUv": "HIGH UV TODAY",
+  "alertAirQuality": "POOR AIR QUALITY"
 }

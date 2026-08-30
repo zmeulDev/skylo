@@ -50,31 +50,45 @@ class WeatherRepositoryImpl implements WeatherRepository {
     final weather =
         await _remoteDataSource.getWeather(lat, lon, lang: lang);
 
+    // Pin the exact request coords (OWM's own are grid-snapped).
+    final pinned = _copyWith(weather, lat: lat, lon: lon);
+
     final platformName = await _geocoder.locality(lat, lon, locale: lang);
-    if (platformName == null) return weather;
+    if (platformName == null) return pinned;
 
     // Trust the platform when OWM's name is missing or clearly a
     // different place than the coords resolve to.
     if (platformName.toLowerCase() != weather.locationName.toLowerCase()) {
       debugPrint('[Skylo] Location name: OWM "${weather.locationName}" '
           '-> platform "$platformName"');
-      return _withLocationName(weather, platformName);
+      return _withLocationName(pinned, platformName);
     }
-    return weather;
+    return pinned;
   }
 
   WeatherEntity _withLocationName(
       WeatherEntity weather, String name) {
+    return _copyWith(weather, locationName: name);
+  }
+
+  WeatherEntity _copyWith(
+    WeatherEntity weather, {
+    String? locationName,
+    double? lat,
+    double? lon,
+  }) {
     return WeatherEntity(
       currentTemp: weather.currentTemp,
       feelsLikeTemp: weather.feelsLikeTemp,
       condition: weather.condition,
       conditionDescription: weather.conditionDescription,
       weatherCode: weather.weatherCode,
-      locationName: name,
+      locationName: locationName ?? weather.locationName,
       timeZoneOffsetSeconds: weather.timeZoneOffsetSeconds,
       hourly: weather.hourly,
       daily: weather.daily,
+      lat: lat ?? weather.lat,
+      lon: lon ?? weather.lon,
     );
   }
 }

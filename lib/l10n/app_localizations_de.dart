@@ -125,4 +125,31 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get networkError =>
       'OpenWeatherMap konnte nicht erreicht werden. Prüfe deine Verbindung.';
+
+  @override
+  String get alertThunderstorm => 'GEWITTER ERWARTET';
+
+  @override
+  String get alertSnow => 'SCHNEE ERWARTET';
+
+  @override
+  String get alertRain => 'REGEN ERWARTET';
+
+  @override
+  String get alertWindGust => 'STARKE BÖEN';
+
+  @override
+  String get alertHeat => 'HITZEWARTE';
+
+  @override
+  String get alertCold => 'EXTREME KÄLTE';
+
+  @override
+  String get alertFog => 'NEBEL ERWARTET';
+
+  @override
+  String get alertUv => 'HOHER UV-INDEX';
+
+  @override
+  String get alertAirQuality => 'SCHLECHTE LUFTQUALITÄT';
 }

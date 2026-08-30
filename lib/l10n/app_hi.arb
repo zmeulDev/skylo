@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Skylo के लिए लोकेशन एक्सेस बंद है। सिस्टम सेटिंग्स → प्राइवेसी और सुरक्षा → लोकेशन सेवाओं में सक्षम करें।",
   "apiKeyInvalid": "OpenWeatherMap ने API कुंजी अस्वीकार कर दी (401)। कुंजी मान्य है या नहीं जांचें।",
   "rateLimited": "OpenWeatherMap की सीमा पार हो गई। एक मिनट में फिर कोशिश करें।",
-  "networkError": "OpenWeatherMap से संपर्क नहीं हो सका। अपना कनेक्शन जांचें।"
+  "networkError": "OpenWeatherMap से संपर्क नहीं हो सका। अपना कनेक्शन जांचें।",
+  "alertThunderstorm": "आंधी-तूफ़ान संभव",
+  "alertSnow": "बर्फ़बारी संभव",
+  "alertRain": "बारिश संभव",
+  "alertWindGust": "तेज़ हवाएँ",
+  "alertHeat": "गर्मी का अलर्ट",
+  "alertCold": "कड़ाके की ठंड",
+  "alertFog": "कोहरा संभव",
+  "alertUv": "यूवी सूचकांक अधिक",
+  "alertAirQuality": "वायु गुणवत्ता खराब"
 }

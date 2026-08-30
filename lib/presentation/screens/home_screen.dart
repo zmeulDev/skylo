@@ -11,6 +11,7 @@ import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
 import 'package:skylo/presentation/providers/units_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
+import 'package:skylo/presentation/widgets/alert_banner.dart';
 import 'package:skylo/presentation/widgets/anim/entrance.dart';
 import 'package:skylo/presentation/widgets/anim/motion.dart';
 import 'package:skylo/presentation/widgets/day_detail_sheet.dart';
@@ -174,10 +175,15 @@ class _WeatherContent extends StatelessWidget {
                 index: 1,
                 child: _CurrentBlock(weather: weather, animateKey: place.id),
               ),
-              SizedBox(height: compact ? 48 : 72),
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 2,
+                child: AlertBanner(place: place),
+              ),
+              SizedBox(height: compact ? 48 : 72),
+              StaggeredEntrance(
+                animateKey: place.id,
+                index: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -188,7 +194,7 @@ class _WeatherContent extends StatelessWidget {
               ),
               StaggeredEntrance(
                 animateKey: place.id,
-                index: 3,
+                index: 4,
                 child: _HourlyTable(
                   hourly: weather.hourly,
                   animateKey: place.id,
@@ -198,7 +204,7 @@ class _WeatherContent extends StatelessWidget {
               SizedBox(height: compact ? 48 : 72),
               StaggeredEntrance(
                 animateKey: place.id,
-                index: 4,
+                index: 5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -209,7 +215,7 @@ class _WeatherContent extends StatelessWidget {
               ),
               StaggeredEntrance(
                 animateKey: place.id,
-                index: 5,
+                index: 6,
                 child: _DailyTable(
                   daily: weather.daily,
                   localNow: cityNow,
@@ -220,7 +226,7 @@ class _WeatherContent extends StatelessWidget {
               SizedBox(height: compact ? 32 : 56),
               StaggeredEntrance(
                 animateKey: place.id,
-                index: 6,
+                index: 7,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child:

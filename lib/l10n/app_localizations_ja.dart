@@ -122,4 +122,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get networkError => 'OpenWeatherMap に接続できません。接続を確認してください。';
+
+  @override
+  String get alertThunderstorm => '雷雨の予想';
+
+  @override
+  String get alertSnow => '降雪の予想';
+
+  @override
+  String get alertRain => '降雨の予想';
+
+  @override
+  String get alertWindGust => '強風に注意';
+
+  @override
+  String get alertHeat => '高温注意';
+
+  @override
+  String get alertCold => '厳寒注意';
+
+  @override
+  String get alertFog => '霧の予想';
+
+  @override
+  String get alertUv => '紫外線が強い';
+
+  @override
+  String get alertAirQuality => '大気汚染注意';
 }

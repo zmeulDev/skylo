@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "L'accesso alla posizione è disattivato per Skylo. Attivalo in Impostazioni sistema → Privacy e sicurezza → Servizi di localizzazione.",
   "apiKeyInvalid": "OpenWeatherMap ha rifiutato la chiave API (401). Verifica che la chiave sia valida.",
   "rateLimited": "Limite OpenWeatherMap superato. Riprova tra un minuto.",
-  "networkError": "Impossibile contattare OpenWeatherMap. Controlla la connessione."
+  "networkError": "Impossibile contattare OpenWeatherMap. Controlla la connessione.",
+  "alertThunderstorm": "TEMPESTA ATTESA",
+  "alertSnow": "NEVE ATTESA",
+  "alertRain": "PIOGGIA ATTESA",
+  "alertWindGust": "RAFFICHE FORTE",
+  "alertHeat": "ONDATA DI CALORE",
+  "alertCold": "FREDDO ESTREMO",
+  "alertFog": "NEBBIA ATTESA",
+  "alertUv": "INDICE UV ALTO",
+  "alertAirQuality": "QUALITÀ DELL'ARIA SCARSA"
 }

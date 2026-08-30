@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Skylo の位置情報アクセスが無効です。システム設定 → プライバシーとセキュリティ → 位置情報サービス で有効にしてください。",
   "apiKeyInvalid": "OpenWeatherMap が API キーを拒否しました (401)。キーが有効か確認してください。",
   "rateLimited": "OpenWeatherMap のリクエスト制限を超えました。1分後に再試行してください。",
-  "networkError": "OpenWeatherMap に接続できません。接続を確認してください。"
+  "networkError": "OpenWeatherMap に接続できません。接続を確認してください。",
+  "alertThunderstorm": "雷雨の予想",
+  "alertSnow": "降雪の予想",
+  "alertRain": "降雨の予想",
+  "alertWindGust": "強風に注意",
+  "alertHeat": "高温注意",
+  "alertCold": "厳寒注意",
+  "alertFog": "霧の予想",
+  "alertUv": "紫外線が強い",
+  "alertAirQuality": "大気汚染注意"
 }

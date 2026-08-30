@@ -43,5 +43,14 @@
   "permissionPermanentlyDeniedMessage": "Skylo 的位置访问已禁用。请在 系统设置 → 隐私与安全 → 定位服务 中启用。",
   "apiKeyInvalid": "OpenWeatherMap 拒绝了 API 密钥 (401)。请检查密钥是否有效。",
   "rateLimited": "已超出 OpenWeatherMap 请求限制。请一分钟后重试。",
-  "networkError": "无法连接 OpenWeatherMap。请检查网络连接。"
+  "networkError": "无法连接 OpenWeatherMap。请检查网络连接。",
+  "alertThunderstorm": "预计有雷暴",
+  "alertSnow": "预计有降雪",
+  "alertRain": "预计有降雨",
+  "alertWindGust": "强阵风",
+  "alertHeat": "高温预警",
+  "alertCold": "严寒预警",
+  "alertFog": "预计有雾",
+  "alertUv": "紫外线强",
+  "alertAirQuality": "空气质量差"
 }

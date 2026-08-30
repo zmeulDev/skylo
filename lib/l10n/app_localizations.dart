@@ -341,6 +341,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not reach OpenWeatherMap. Check your connection.'**
   String get networkError;
+
+  /// No description provided for @alertThunderstorm.
+  ///
+  /// In en, this message translates to:
+  /// **'THUNDERSTORM EXPECTED'**
+  String get alertThunderstorm;
+
+  /// No description provided for @alertSnow.
+  ///
+  /// In en, this message translates to:
+  /// **'SNOW EXPECTED'**
+  String get alertSnow;
+
+  /// No description provided for @alertRain.
+  ///
+  /// In en, this message translates to:
+  /// **'RAIN EXPECTED'**
+  String get alertRain;
+
+  /// No description provided for @alertWindGust.
+  ///
+  /// In en, this message translates to:
+  /// **'STRONG GUSTS EXPECTED'**
+  String get alertWindGust;
+
+  /// No description provided for @alertHeat.
+  ///
+  /// In en, this message translates to:
+  /// **'HEAT WATCH'**
+  String get alertHeat;
+
+  /// No description provided for @alertCold.
+  ///
+  /// In en, this message translates to:
+  /// **'COLD WATCH'**
+  String get alertCold;
+
+  /// No description provided for @alertFog.
+  ///
+  /// In en, this message translates to:
+  /// **'FOG EXPECTED'**
+  String get alertFog;
+
+  /// No description provided for @alertUv.
+  ///
+  /// In en, this message translates to:
+  /// **'HIGH UV TODAY'**
+  String get alertUv;
+
+  /// No description provided for @alertAirQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'POOR AIR QUALITY'**
+  String get alertAirQuality;
 }
 
 class _AppLocalizationsDelegate

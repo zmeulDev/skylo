@@ -125,4 +125,31 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get networkError =>
       'Impossibile contattare OpenWeatherMap. Controlla la connessione.';
+
+  @override
+  String get alertThunderstorm => 'TEMPESTA ATTESA';
+
+  @override
+  String get alertSnow => 'NEVE ATTESA';
+
+  @override
+  String get alertRain => 'PIOGGIA ATTESA';
+
+  @override
+  String get alertWindGust => 'RAFFICHE FORTE';
+
+  @override
+  String get alertHeat => 'ONDATA DI CALORE';
+
+  @override
+  String get alertCold => 'FREDDO ESTREMO';
+
+  @override
+  String get alertFog => 'NEBBIA ATTESA';
+
+  @override
+  String get alertUv => 'INDICE UV ALTO';
+
+  @override
+  String get alertAirQuality => 'QUALITÀ DELL\'ARIA SCARSA';
 }

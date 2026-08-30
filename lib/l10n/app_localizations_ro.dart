@@ -125,4 +125,31 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String get networkError =>
       'Nu s-a putut contacta OpenWeatherMap. Verifică conexiunea.';
+
+  @override
+  String get alertThunderstorm => 'SE AȘTEAPTĂ FURTUNĂ';
+
+  @override
+  String get alertSnow => 'SE AȘTEAPTĂ NINDEARE';
+
+  @override
+  String get alertRain => 'SE AȘTEAPTĂ PLOAIE';
+
+  @override
+  String get alertWindGust => 'RAFALE PUTERNICE';
+
+  @override
+  String get alertHeat => 'CANICULĂ';
+
+  @override
+  String get alertCold => 'FRIG EXTREM';
+
+  @override
+  String get alertFog => 'SE AȘTEAPTĂ CEAȚĂ';
+
+  @override
+  String get alertUv => 'INDICE UV RIDICAT';
+
+  @override
+  String get alertAirQuality => 'AER SLAB CALITATIV';
 }

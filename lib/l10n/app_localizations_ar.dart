@@ -124,4 +124,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get networkError => 'تعذر الوصول إلى OpenWeatherMap. تحقق من اتصالك.';
+
+  @override
+  String get alertThunderstorm => 'عاصفة رعدية متوقعة';
+
+  @override
+  String get alertSnow => 'تساقط ثلوج متوقع';
+
+  @override
+  String get alertRain => 'أمطار متوقعة';
+
+  @override
+  String get alertWindGust => 'رياح شديدة';
+
+  @override
+  String get alertHeat => 'موجة حرة';
+
+  @override
+  String get alertCold => 'برد شديد';
+
+  @override
+  String get alertFog => 'ضباب متوقع';
+
+  @override
+  String get alertUv => 'مؤشر الأشعة فوق البنفسجية مرتفع';
+
+  @override
+  String get alertAirQuality => 'جودة هواء رديئة';
 }
