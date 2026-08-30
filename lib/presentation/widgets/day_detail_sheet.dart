@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:skylo/domain/entities/daily_forecast.dart';
 import 'package:skylo/domain/entities/hourly_forecast.dart';
 import 'package:skylo/domain/entities/weather_entity.dart' show WeatherUnitsX;
+import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/units_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
 import 'package:skylo/presentation/widgets/anim/motion.dart';
@@ -32,7 +33,9 @@ class _DayDetailSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final units = ref.watch(unitsProvider);
+    final l10n = AppLocalizations.of(context)!;
+    final units = resolveUnits(
+        ref.watch(unitsProvider), Localizations.localeOf(context));
     final hours = day.hours;
     final maxPop = hours.isEmpty
         ? 0.0
@@ -58,22 +61,23 @@ class _DayDetailSheet extends ConsumerWidget {
               Text(title, style: AppText.location(context)),
               const SizedBox(height: 6),
               Text(
-                DateFormat('EEEE, d MMMM').format(day.date),
+                DateFormat('EEEE, d MMMM', Localizations.localeOf(context).toString())
+                    .format(day.date),
                 style: AppText.condition(context).copyWith(fontSize: 15),
               ),
               const SizedBox(height: 32),
               Row(
                 children: [
                   _Stat(
-                    label: 'MIN',
+                    label: l10n.minLabel,
                     value: '${units.convertTemp(day.minTemp).round()}°',
                   ),
                   _Stat(
-                    label: 'MAX',
+                    label: l10n.maxLabel,
                     value: '${units.convertTemp(day.maxTemp).round()}°',
                   ),
                   _Stat(
-                    label: 'RAIN',
+                    label: l10n.rain,
                     value: '${maxPop.round()}%',
                     accent: rainy,
                   ),
@@ -85,12 +89,12 @@ class _DayDetailSheet extends ConsumerWidget {
                   Container(
                       width: 3, height: 14, color: context.skylo.accent),
                   const SizedBox(width: 10),
-                  Text('3-HOUR STEPS', style: AppText.label(context)),
+                  Text(l10n.threeHourSteps, style: AppText.label(context)),
                 ],
               ),
               const SizedBox(height: 20),
               if (hours.isEmpty)
-                Text('No hourly detail for this day.',
+                Text(l10n.noHourlyDetail,
                     style: AppText.condition(context))
               else
                 _DayTimeline(hours: hours, animateKey: day.date),
@@ -139,7 +143,8 @@ class _DayTimeline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final units = ref.watch(unitsProvider);
+    final units = resolveUnits(
+        ref.watch(unitsProvider), Localizations.localeOf(context));
     final temps = hours.map((h) => h.temp).toList();
     final minTemp = temps.reduce((a, b) => a < b ? a : b);
     final maxTemp = temps.reduce((a, b) => a > b ? a : b);

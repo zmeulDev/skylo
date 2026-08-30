@@ -10,12 +10,15 @@ class WeatherRepositoryImpl implements WeatherRepository {
   WeatherRepositoryImpl(this._remoteDataSource, this._locationService);
 
   @override
-  Future<WeatherEntity> getCurrentLocationWeather() async {
+  Future<WeatherEntity> getCurrentLocationWeather({String lang = 'en'}) async {
     final location = await _locationService.getCurrentLocation();
-    return _remoteDataSource.getWeather(location.latitude, location.longitude);
+    return _remoteDataSource.getWeather(location.latitude,
+        location.longitude,
+        lang: lang);
   }
 
   @override
-  Future<WeatherEntity> getWeatherForLocation(double lat, double lon) =>
-      _remoteDataSource.getWeather(lat, lon);
+  Future<WeatherEntity> getWeatherForLocation(double lat, double lon,
+          {String lang = 'en'}) =>
+      _remoteDataSource.getWeather(lat, lon, lang: lang);
 }

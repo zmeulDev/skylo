@@ -1,12 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/data/datasources/geocoding_data_source.dart';
 import 'package:skylo/data/repositories/saved_places_repository.dart';
 import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
 
-import 'theme_providers.dart';
-import 'weather_providers.dart';
+import 'package:skylo/presentation/providers/locale_providers.dart';
+import 'package:skylo/presentation/providers/theme_providers.dart';
+import 'package:skylo/presentation/providers/weather_providers.dart';
 
 final geocodingDataSourceProvider = Provider<GeocodingDataSource>((ref) {
   return GeocodingDataSource(
@@ -57,15 +58,26 @@ final savedPlacesProvider =
   (ref) => SavedPlacesNotifier(ref.watch(savedPlacesRepositoryProvider)),
 );
 
+/// The device's own locale, for when no app override is set.
+final platformLocaleProvider = Provider<Locale>((ref) {
+  return WidgetsBinding.instance.platformDispatcher.locale;
+});
+
 /// Weather for one saved place. The current-location place resolves
-/// via geolocation; others by coordinates.
+/// via geolocation; others by coordinates. The response language follows
+/// the active app locale.
 final placeWeatherProvider =
-    FutureProvider.autoDispose.family<WeatherEntity, SavedPlace>((ref, place) {
+    FutureProvider.autoDispose.family<WeatherEntity, SavedPlace>(
+        (ref, place) {
   final repository = ref.watch(weatherRepositoryProvider);
+  final Locale? override = ref.watch(localeProvider);
+  final Locale locale =
+      override ?? ref.watch(platformLocaleProvider);
+  final lang = locale.languageCode;
   if (place.isCurrentLocation) {
-    return repository.getCurrentLocationWeather();
+    return repository.getCurrentLocationWeather(lang: lang);
   }
-  return repository.getWeatherForLocation(place.lat, place.lon);
+  return repository.getWeatherForLocation(place.lat, place.lon, lang: lang);
 });
 
 /// City search for the add-place sheet.

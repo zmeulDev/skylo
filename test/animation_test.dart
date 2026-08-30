@@ -13,7 +13,7 @@ import 'package:skylo/presentation/widgets/theme_toggle.dart';
 
 class _AnimFakeRepo implements WeatherRepository {
   @override
-  Future<WeatherEntity> getCurrentLocationWeather() async => WeatherEntity(
+  Future<WeatherEntity> getCurrentLocationWeather({String lang = 'en'}) async => WeatherEntity(
         currentTemp: 22.0,
         feelsLikeTemp: 21.0,
         condition: 'Clear',
@@ -40,7 +40,8 @@ class _AnimFakeRepo implements WeatherRepository {
       );
 
   @override
-  Future<WeatherEntity> getWeatherForLocation(double lat, double lon) async =>
+  Future<WeatherEntity> getWeatherForLocation(double lat, double lon,
+          {String lang = 'en'}) async =>
       getCurrentLocationWeather();
 }
 

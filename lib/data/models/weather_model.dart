@@ -10,6 +10,7 @@ class WeatherModel extends WeatherEntity {
     required super.currentTemp,
     required super.feelsLikeTemp,
     required super.condition,
+    super.conditionDescription,
     required super.weatherCode,
     super.locationName,
     super.timeZoneOffsetSeconds,
@@ -35,6 +36,15 @@ class WeatherModel extends WeatherEntity {
       return DateTime(shifted.year, shifted.month, shifted.day,
           shifted.hour, shifted.minute);
     }
+
+    String mainOf(Map<String, dynamic> raw) =>
+        ((raw['weather'] as List<dynamic>).first
+            as Map<String, dynamic>)['main'] as String;
+
+    String descriptionOf(Map<String, dynamic> raw) =>
+        ((raw['weather'] as List<dynamic>).first
+                as Map<String, dynamic>)['description'] as String? ??
+        '';
 
     final hourly = hourlyJson
         .map((raw) => HourlyForecast(
@@ -64,7 +74,8 @@ class WeatherModel extends WeatherEntity {
     return WeatherModel(
       currentTemp: (current['temp'] as num).toDouble(),
       feelsLikeTemp: (current['feels_like'] as num).toDouble(),
-      condition: (current['weather'] as List<dynamic>).first['main'] as String,
+      condition: mainOf(current),
+      conditionDescription: descriptionOf(current),
       weatherCode: ((current['weather'] as List<dynamic>).first['id'] as num).toInt(),
       locationName: (json['timezone'] as String?) ?? '',
       timeZoneOffsetSeconds: tzOffset,

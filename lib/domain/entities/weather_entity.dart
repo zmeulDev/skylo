@@ -5,6 +5,7 @@ class WeatherEntity {
   final double currentTemp;
   final double feelsLikeTemp;
   final String condition;
+  final String conditionDescription;
   final int weatherCode;
   final String locationName;
   final int timeZoneOffsetSeconds;
@@ -15,6 +16,7 @@ class WeatherEntity {
     required this.currentTemp,
     required this.feelsLikeTemp,
     required this.condition,
+    this.conditionDescription = '',
     required this.weatherCode,
     this.locationName = '',
     this.timeZoneOffsetSeconds = 0,
@@ -39,21 +41,32 @@ class WeatherEntity {
   }
 }
 
-enum WeatherUnits { metric, imperial }
+enum WeatherUnits { system, metric, imperial }
 
 extension WeatherUnitsX on WeatherUnits {
   double convertTemp(double celsius) => switch (this) {
         WeatherUnits.metric => celsius,
         WeatherUnits.imperial => celsius * 9 / 5 + 32,
+        WeatherUnits.system => celsius,
       };
 
   String get degreeLabel => switch (this) {
         WeatherUnits.metric => '°C',
         WeatherUnits.imperial => '°F',
+        // Resolved by the caller against the locale before use.
+        WeatherUnits.system => '°C',
       };
 
   String get name => switch (this) {
         WeatherUnits.metric => 'Metric (°C)',
         WeatherUnits.imperial => 'Imperial (°F)',
+        WeatherUnits.system => 'System',
       };
+
+  /// A single country code drives the default: the US uses °F,
+  /// everyone else °C.
+  static WeatherUnits fromCountryCode(String? code) =>
+      code == 'US' || code == 'LR' || code == 'MM'
+          ? WeatherUnits.imperial
+          : WeatherUnits.metric;
 }

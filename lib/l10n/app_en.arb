@@ -1,0 +1,46 @@
+{
+  "@@locale": "en",
+  "appTitle": "Skylo — Know your sky.",
+  "currentLocation": "Current location",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "next24Hours": "Next 24 hours",
+  "fiveDayOutlook": "5-day outlook",
+  "noHourlyData": "No hourly data",
+  "noDailyData": "No daily data",
+  "feelsLike": "FEELS {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "KNOW YOUR SKY",
+  "addAPlace": "ADD A PLACE",
+  "searchCity": "Search city",
+  "noPlacesFound": "No places found.",
+  "searchFailed": "Search failed. Check your connection.",
+  "settings": "SETTINGS",
+  "theme": "Theme",
+  "units": "Units",
+  "language": "Language",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "LIGHT",
+  "dark": "DARK",
+  "weatherUnavailable": "Weather unavailable",
+  "locationUnavailable": "Location unavailable",
+  "retry": "RETRY",
+  "openSystemSettings": "OPEN SYSTEM SETTINGS",
+  "rain": "RAIN",
+  "minLabel": "MIN",
+  "maxLabel": "MAX",
+  "threeHourSteps": "3-HOUR STEPS",
+  "noHourlyDetail": "No hourly detail for this day.",
+  "permissionDeniedMessage": "Skylo needs location permission to show your local weather.",
+  "permissionPermanentlyDeniedMessage": "Location access is disabled for Skylo. Enable it in System Settings → Privacy & Security → Location Services.",
+  "apiKeyInvalid": "OpenWeatherMap rejected the API key (401). Check that the key is valid.",
+  "rateLimited": "OpenWeatherMap rate limit exceeded. Try again in a minute.",
+  "networkError": "Could not reach OpenWeatherMap. Check your connection."
+}

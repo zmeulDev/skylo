@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
+import 'package:skylo/l10n/app_localizations.dart';
+import 'package:skylo/presentation/providers/locale_providers.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/providers/units_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
 
-/// Opens the settings sheet: theme + units, in the design language.
+/// Opens the settings sheet: theme + units + language, in the design
+/// language.
 Future<void> showSettingsSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
@@ -22,9 +25,12 @@ class _SettingsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = isEffectiveDark(ref.watch(themeModeProvider));
-    final isImperial =
-        ref.watch(unitsProvider) == WeatherUnits.imperial;
+    final localeOverride = ref.watch(localeProvider);
+    final resolvedLocale = localeOverride ??
+        Localizations.localeOf(context);
+    final units = resolveUnits(ref.watch(unitsProvider), resolvedLocale);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -43,7 +49,7 @@ class _SettingsSheet extends ConsumerWidget {
                 Container(
                     width: 3, height: 14, color: context.skylo.accent),
                 const SizedBox(width: 10),
-                Text('SETTINGS', style: AppText.label(context)),
+                Text(l10n.settings, style: AppText.label(context)),
               ],
             ),
             const SizedBox(height: 28),
@@ -51,15 +57,10 @@ class _SettingsSheet extends ConsumerWidget {
               icon: isDark
                   ? Icons.dark_mode_outlined
                   : Icons.light_mode_outlined,
-              title: 'Theme',
+              title: l10n.theme,
               trailing: Text(
-                isDark ? 'DARK' : 'LIGHT',
-                style: AppText.tabular(context).copyWith(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: context.skylo.muted,
-                ),
+                isDark ? l10n.dark : l10n.light,
+                style: _stateStyle(context),
               ),
               onTap: () {
                 // Close first, then run the ink-reveal from this row's
@@ -73,26 +74,60 @@ class _SettingsSheet extends ConsumerWidget {
             const SizedBox(height: 12),
             _SettingsRow(
               icon: Icons.straighten_outlined,
-              title: 'Units',
+              title: l10n.units,
               trailing: Text(
-                isImperial ? '°F' : '°C',
-                style: AppText.tabular(context).copyWith(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: context.skylo.muted,
-                ),
+                units == WeatherUnits.metric
+                    ? l10n.celsiusUnit
+                    : l10n.fahrenheitUnit,
+                style: _stateStyle(context),
               ),
-              onTap: () => ref.read(unitsProvider.notifier).set(
-                    isImperial
-                        ? WeatherUnits.metric
-                        : WeatherUnits.imperial,
-                  ),
+              onTap: () {
+                final locale = localeOverride ??
+                    Localizations.localeOf(context);
+                ref
+                    .read(unitsProvider.notifier)
+                    .toggle(locale);
+              },
+            ),
+            const SizedBox(height: 12),
+            _SettingsRow(
+              icon: Icons.language_outlined,
+              title: l10n.language,
+              trailing: Text(
+                _languageLabel(localeOverride),
+                style: _stateStyle(context),
+              ),
+              onTap: () => _cycleLanguage(ref, localeOverride),
             ),
           ],
         ),
       ),
     );
+  }
+
+  TextStyle _stateStyle(BuildContext context) =>
+      AppText.tabular(context).copyWith(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.2,
+        color: context.skylo.muted,
+      );
+
+  String _languageLabel(Locale? override) {
+    if (override == null) return 'SYSTEM';
+    if (override.languageCode == 'ro') return 'ROMÂNĂ';
+    return 'ENGLISH';
+  }
+
+  void _cycleLanguage(WidgetRef ref, Locale? current) {
+    // system -> en -> ro -> system
+    final next = switch (current) {
+      null => const Locale('en'),
+      Locale(languageCode: 'en') => const Locale('ro'),
+      Locale(languageCode: 'ro') => null,
+      _ => null,
+    };
+    ref.read(localeProvider.notifier).set(next);
   }
 }
 

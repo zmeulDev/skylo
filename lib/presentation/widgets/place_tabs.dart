@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/domain/entities/saved_place.dart';
+import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
 import 'package:skylo/presentation/widgets/anim/entrance.dart';
@@ -107,7 +108,10 @@ class _PlaceTabsState extends State<PlaceTabs> {
                     final active = i == widget.index;
                     return _Tab(
                       key: _keys[i],
-                      label: place.label.toUpperCase(),
+                      label: (place.isCurrentLocation
+                              ? AppLocalizations.of(context)!.currentLocation
+                              : place.label)
+                          .toUpperCase(),
                       active: active,
                       onTap: () => widget.onTap(i),
                     );
@@ -239,7 +243,8 @@ class _AddPlaceSheetState extends ConsumerState<_AddPlaceSheet> {
                 Container(
                     width: 3, height: 14, color: context.skylo.accent),
                 const SizedBox(width: 10),
-                Text('ADD A PLACE', style: AppText.label(context)),
+                Text(AppLocalizations.of(context)!.addAPlace,
+                    style: AppText.label(context)),
               ],
             ),
             const SizedBox(height: 24),
@@ -250,7 +255,7 @@ class _AddPlaceSheetState extends ConsumerState<_AddPlaceSheet> {
               style: AppText.location(context).copyWith(fontSize: 20),
               cursorColor: context.skylo.accent,
               decoration: InputDecoration(
-                hintText: 'Search city',
+                hintText: AppLocalizations.of(context)!.searchCity,
                 hintStyle: AppText.condition(context),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: context.skylo.hairline),
@@ -304,13 +309,13 @@ class _Results extends ConsumerWidget {
       ),
       error: (e, _) => Padding(
         padding: const EdgeInsets.only(top: 24),
-        child: Text('Search failed. Check your connection.',
+        child: Text(AppLocalizations.of(context)!.searchFailed,
             style: AppText.condition(context)),
       ),
       data: (list) => list.isEmpty
           ? Padding(
               padding: const EdgeInsets.only(top: 24),
-              child: Text('No places found.',
+              child: Text(AppLocalizations.of(context)!.noPlacesFound,
                   style: AppText.condition(context)),
             )
           : SingleChildScrollView(

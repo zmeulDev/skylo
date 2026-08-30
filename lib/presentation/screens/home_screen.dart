@@ -7,6 +7,7 @@ import 'package:skylo/domain/entities/hourly_forecast.dart';
 import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
 import 'package:skylo/domain/exceptions/location_permission_exception.dart';
+import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
 import 'package:skylo/presentation/providers/units_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
@@ -148,6 +149,8 @@ class _WeatherContent extends StatelessWidget {
   Widget build(BuildContext context) {
     // City-local "now" drives Today/Tomorrow labels and hour filtering.
     final cityNow = weather.localNow();
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
     return LayoutBuilder(builder: (context, constraints) {
       final compact = constraints.maxWidth < 700;
       final width = compact ? constraints.maxWidth : 680.0;
@@ -175,11 +178,11 @@ class _WeatherContent extends StatelessWidget {
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 2,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SectionLabel(text: 'Next 24 hours'),
-                    SizedBox(height: 20),
+                    SectionLabel(text: l10n.next24Hours),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -196,18 +199,23 @@ class _WeatherContent extends StatelessWidget {
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 4,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SectionLabel(text: '5-day outlook'),
-                    SizedBox(height: 12),
+                    SectionLabel(text: l10n.fiveDayOutlook),
+                    const SizedBox(height: 12),
                   ],
                 ),
               ),
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 5,
-                child: _DailyTable(daily: weather.daily, localNow: cityNow),
+                child: _DailyTable(
+                  daily: weather.daily,
+                  localNow: cityNow,
+                  l10n: l10n,
+                  locale: locale,
+                ),
               ),
               SizedBox(height: compact ? 32 : 56),
               StaggeredEntrance(
@@ -215,7 +223,8 @@ class _WeatherContent extends StatelessWidget {
                 index: 6,
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text('KNOW YOUR SKY', style: AppText.tagline(context)),
+                  child:
+                      Text(l10n.knowYourSky, style: AppText.tagline(context)),
                 ),
               ),
             ],
@@ -241,10 +250,15 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     // City-local time, not the viewer's.
     final now = weather.localNow();
-    final title = weather.locationName.isEmpty ? place.label : weather.locationName;
+    final l10n = AppLocalizations.of(context)!;
+    final title =
+        place.isCurrentLocation && weather.locationName.isEmpty
+            ? l10n.currentLocation
+            : (place.isCurrentLocation ? weather.locationName : place.label);
     // Show the local clock for every saved city; only your own location
     // omits it (your clock is already in your pocket).
     final showClock = !place.isCurrentLocation;
+    final locale = Localizations.localeOf(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -253,12 +267,12 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                place.isCurrentLocation ? title : place.label,
+                title,
                 style: AppText.location(context),
               ),
               const SizedBox(height: 6),
               Text(
-                '${DateFormat('EEEE, d MMMM').format(now)}'
+                '${DateFormat('EEEE, d MMMM', locale.toString()).format(now)}'
                 '${showClock ? ' · ${DateFormat('HH:mm').format(now)}' : ''}',
                 style: AppText.condition(context).copyWith(fontSize: 15),
               ),
@@ -284,7 +298,9 @@ class _CurrentBlock extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final units = ref.watch(unitsProvider);
+    final l10n = AppLocalizations.of(context)!;
+    final units = resolveUnits(
+        ref.watch(unitsProvider), Localizations.localeOf(context));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -307,7 +323,10 @@ class _CurrentBlock extends ConsumerWidget {
             WeatherGlyph(weatherCode: weather.weatherCode, size: 20),
             const SizedBox(width: 8),
             Text(
-              weather.condition.toUpperCase(),
+              (weather.conditionDescription.isEmpty
+                      ? weather.condition
+                      : weather.conditionDescription)
+                  .toUpperCase(),
               style: AppText.tabular(context).copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -316,7 +335,7 @@ class _CurrentBlock extends ConsumerWidget {
             ),
             const SizedBox(width: 24),
             Text(
-              'FEELS ${units.convertTemp(weather.feelsLikeTemp).round()}°',
+              l10n.feelsLike(units.convertTemp(weather.feelsLikeTemp).round()),
               style: AppText.tabular(context).copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -345,9 +364,11 @@ class _HourlyTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (hourly.isEmpty) {
-      return Text('No hourly data', style: AppText.body(context));
+      return Text(AppLocalizations.of(context)!.noHourlyData,
+          style: AppText.body(context));
     }
-    final units = ref.watch(unitsProvider);
+    final units = resolveUnits(
+        ref.watch(unitsProvider), Localizations.localeOf(context));
     // Show the next 8 slots from the city's current time, not the viewer's.
     final cutoff = DateTime(
         localNow.year, localNow.month, localNow.day, localNow.hour);
@@ -412,15 +433,22 @@ class _HourlyTable extends ConsumerWidget {
 class _DailyTable extends ConsumerWidget {
   final List<DailyForecast> daily;
   final DateTime localNow;
+  final AppLocalizations l10n;
+  final Locale locale;
 
-  const _DailyTable({required this.daily, required this.localNow});
+  const _DailyTable({
+    required this.daily,
+    required this.localNow,
+    required this.l10n,
+    required this.locale,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (daily.isEmpty) {
-      return Text('No daily data', style: AppText.body(context));
+      return Text(l10n.noDailyData, style: AppText.body(context));
     }
-    final units = ref.watch(unitsProvider);
+    final units = resolveUnits(ref.watch(unitsProvider), locale);
     final today = localNow.day;
     return Column(
       children: [
@@ -482,9 +510,9 @@ class _DailyTable extends ConsumerWidget {
   String _dayLabel(DateTime date) {
     final today = DateTime(localNow.year, localNow.month, localNow.day);
     final diff = date.difference(today).inDays;
-    if (diff == 0) return 'Today';
-    if (diff == 1) return 'Tomorrow';
-    return DateFormat('EEEE').format(date);
+    if (diff == 0) return l10n.today;
+    if (diff == 1) return l10n.tomorrow;
+    return DateFormat('EEEE', locale.toString()).format(date);
   }
 }
 
@@ -496,6 +524,7 @@ class _ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isLocationError = error is LocationPermissionException;
     final isPermanentlyDenied =
         isLocationError && (error as LocationPermissionException).permanently;
@@ -520,11 +549,13 @@ class _ErrorView extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                isLocationError ? 'Location unavailable' : 'Weather unavailable',
+                isLocationError
+                    ? l10n.locationUnavailable
+                    : l10n.weatherUnavailable,
                 style: AppText.location(context).copyWith(fontSize: 20),
               ),
               const SizedBox(height: 12),
-              Text(error.toString(), style: AppText.condition(context)),
+              Text(_localizedError(l10n), style: AppText.condition(context)),
               const SizedBox(height: 32),
               isPermanentlyDenied
                   ? TextButton(
@@ -536,7 +567,7 @@ class _ErrorView extends StatelessWidget {
                       ),
                       onPressed: () => Geolocator.openLocationSettings(),
                       child: Text(
-                        'Open System Settings'.toUpperCase(),
+                        l10n.openSystemSettings,
                         style: AppText.button(context),
                       ),
                     )
@@ -548,13 +579,21 @@ class _ErrorView extends StatelessWidget {
                             horizontal: 32, vertical: 14),
                       ),
                       onPressed: onRetry,
-                      child: Text('RETRY'.toUpperCase(),
-                          style: AppText.button(context)),
+                      child: Text(l10n.retry, style: AppText.button(context)),
                     ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _localizedError(AppLocalizations l10n) {
+    if (error is LocationPermissionException) {
+      return (error as LocationPermissionException).permanently
+          ? l10n.permissionPermanentlyDeniedMessage
+          : l10n.permissionDeniedMessage;
+    }
+    return error.toString();
   }
 }

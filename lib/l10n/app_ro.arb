@@ -1,0 +1,46 @@
+{
+  "@@locale": "ro",
+  "appTitle": "Skylo — Cunoaște-ți cerul.",
+  "currentLocation": "Locația curentă",
+  "today": "Azi",
+  "tomorrow": "Mâine",
+  "next24Hours": "Următoarele 24 de ore",
+  "fiveDayOutlook": "Prognoza pe 5 zile",
+  "noHourlyData": "Date orare indisponibile",
+  "noDailyData": "Date zilnice indisponibile",
+  "feelsLike": "SE SIMT {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "CUNOAȘTE-ȚI CERUL",
+  "addAPlace": "ADAUGĂ UN LOC",
+  "searchCity": "Caută un oraș",
+  "noPlacesFound": "Niciun loc găsit.",
+  "searchFailed": "Căutarea a eșuat. Verifică conexiunea.",
+  "settings": "SETĂRI",
+  "theme": "Temă",
+  "units": "Unități",
+  "language": "Limbă",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "LUMINOS",
+  "dark": "ÎNTUNECAT",
+  "weatherUnavailable": "Vremea nu e disponibilă",
+  "locationUnavailable": "Locația nu e disponibilă",
+  "retry": "REÎNCEARCĂ",
+  "openSystemSettings": "DESCHIDE SETĂRILE SISTEMULUI",
+  "rain": "PLOAIE",
+  "minLabel": "MIN",
+  "maxLabel": "MAX",
+  "threeHourSteps": "PAȘI DE 3 ORE",
+  "noHourlyDetail": "Detalii orare indisponibile pentru această zi.",
+  "permissionDeniedMessage": "Skylo are nevoie de permisiunea de locație pentru a-ți arăta vremea locală.",
+  "permissionPermanentlyDeniedMessage": "Accesul la locație este dezactivat pentru Skylo. Activează-l în Setări sistem → Confidențialitate și securitate → Servicii de locație.",
+  "apiKeyInvalid": "OpenWeatherMap a respins cheia API (401). Verifică dacă cheia este validă.",
+  "rateLimited": "Limita de solicitări OpenWeatherMap a fost atinsă. Încearcă din nou într-un minut.",
+  "networkError": "Nu s-a putut contacta OpenWeatherMap. Verifică conexiunea."
+}

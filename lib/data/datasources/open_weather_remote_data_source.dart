@@ -37,17 +37,19 @@ class OpenWeatherRemoteDataSource {
               receiveTimeout: const Duration(seconds: 15),
             ));
 
-  Future<WeatherModel> getWeather(double lat, double lon) async {
-    debugPrint('[Skylo] Fetching weather for $lat, $lon');
-    final current = await _get(_currentUrl, lat, lon);
-    final forecast = await _get(_forecastUrl, lat, lon);
+  Future<WeatherModel> getWeather(double lat, double lon,
+      {String lang = 'en'}) async {
+    debugPrint('[Skylo] Fetching weather for $lat, $lon (lang: $lang)');
+    final current = await _get(_currentUrl, lat, lon, lang);
+    final forecast = await _get(_forecastUrl, lat, lon, lang);
 
     final merged = mergeToOnecallShape(current, forecast);
     debugPrint('[Skylo] Weather fetched: ${merged['timezone'] ?? '?'}');
     return WeatherModel.fromJson(merged);
   }
 
-  Future<Map<String, dynamic>> _get(String url, double lat, double lon) async {
+  Future<Map<String, dynamic>> _get(
+      String url, double lat, double lon, String lang) async {
     try {
       final response = await _dio.get<Object>(
         url,
@@ -56,6 +58,7 @@ class OpenWeatherRemoteDataSource {
           'lon': lon,
           'appid': apiKey,
           'units': 'metric',
+          'lang': lang,
         },
       );
       final data = response.data;

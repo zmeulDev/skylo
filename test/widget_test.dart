@@ -14,7 +14,7 @@ import 'package:skylo/presentation/theme/app_theme.dart';
 
 class _FakeRepository implements WeatherRepository {
   @override
-  Future<WeatherEntity> getCurrentLocationWeather() async => WeatherEntity(
+  Future<WeatherEntity> getCurrentLocationWeather({String lang = 'en'}) async => WeatherEntity(
         currentTemp: 22.4,
         feelsLikeTemp: 21.1,
         condition: 'Clear',
@@ -41,7 +41,8 @@ class _FakeRepository implements WeatherRepository {
       );
 
   @override
-  Future<WeatherEntity> getWeatherForLocation(double lat, double lon) async =>
+  Future<WeatherEntity> getWeatherForLocation(double lat, double lon,
+          {String lang = 'en'}) async =>
       getCurrentLocationWeather();
 }
 
