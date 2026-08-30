@@ -52,5 +52,8 @@
   "alertCold": "برد شديد",
   "alertFog": "ضباب متوقع",
   "alertUv": "مؤشر الأشعة فوق البنفسجية مرتفع",
-  "alertAirQuality": "جودة هواء رديئة"
+  "alertAirQuality": "جودة هواء رديئة",
+  "alertsSetting": "التنبيهات",
+  "on": "مُفعّل",
+  "off": "مُعطّل"
 }

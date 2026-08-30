@@ -52,5 +52,8 @@
   "alertCold": "FRIG EXTREM",
   "alertFog": "SE AȘTEAPTĂ CEAȚĂ",
   "alertUv": "INDICE UV RIDICAT",
-  "alertAirQuality": "AER SLAB CALITATIV"
+  "alertAirQuality": "AER SLAB CALITATIV",
+  "alertsSetting": "Alerte",
+  "on": "ACTIV",
+  "off": "INACTIV"
 }

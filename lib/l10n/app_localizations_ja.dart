@@ -149,4 +149,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get alertAirQuality => '大気汚染注意';
+
+  @override
+  String get alertsSetting => 'アラート';
+
+  @override
+  String get on => 'オン';
+
+  @override
+  String get off => 'オフ';
 }

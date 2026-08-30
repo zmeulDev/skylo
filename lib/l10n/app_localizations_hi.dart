@@ -152,4 +152,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'वायु गुणवत्ता खराब';
+
+  @override
+  String get alertsSetting => 'अलर्ट';
+
+  @override
+  String get on => 'चालू';
+
+  @override
+  String get off => 'बंद';
 }

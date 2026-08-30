@@ -52,5 +52,8 @@
   "alertCold": "严寒预警",
   "alertFog": "预计有雾",
   "alertUv": "紫外线强",
-  "alertAirQuality": "空气质量差"
+  "alertAirQuality": "空气质量差",
+  "alertsSetting": "天气预警",
+  "on": "开",
+  "off": "关"
 }

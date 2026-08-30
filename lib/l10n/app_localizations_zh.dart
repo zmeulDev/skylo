@@ -148,4 +148,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get alertAirQuality => '空气质量差';
+
+  @override
+  String get alertsSetting => '天气预警';
+
+  @override
+  String get on => '开';
+
+  @override
+  String get off => '关';
 }

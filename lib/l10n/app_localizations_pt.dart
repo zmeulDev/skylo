@@ -152,4 +152,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'QUALIDADE DO AR BAIXA';
+
+  @override
+  String get alertsSetting => 'Alertas';
+
+  @override
+  String get on => 'ON';
+
+  @override
+  String get off => 'OFF';
 }

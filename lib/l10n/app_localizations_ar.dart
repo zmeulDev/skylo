@@ -151,4 +151,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'جودة هواء رديئة';
+
+  @override
+  String get alertsSetting => 'التنبيهات';
+
+  @override
+  String get on => 'مُفعّل';
+
+  @override
+  String get off => 'مُعطّل';
 }

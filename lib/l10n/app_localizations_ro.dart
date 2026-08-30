@@ -152,4 +152,13 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'AER SLAB CALITATIV';
+
+  @override
+  String get alertsSetting => 'Alerte';
+
+  @override
+  String get on => 'ACTIV';
+
+  @override
+  String get off => 'INACTIV';
 }

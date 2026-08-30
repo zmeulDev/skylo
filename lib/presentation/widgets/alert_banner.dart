@@ -4,11 +4,13 @@ import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/domain/entities/weather_alert.dart';
 import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/alerts_providers.dart';
+import 'package:skylo/presentation/providers/alerts_settings_provider.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
 
 /// Inline alert strip under the current-weather block. Severe alerts
 /// earn the accent; watches stay ink with a hairline. Follows the
 /// "accent is earned" rule from the design notes.
+/// Off by default — the user turns alerts on in Settings.
 class AlertBanner extends ConsumerWidget {
   final SavedPlace place;
 
@@ -17,6 +19,7 @@ class AlertBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    if (!ref.watch(alertsEnabledProvider)) return const SizedBox.shrink();
     if (l10n == null) return const SizedBox.shrink();
 
     final alertsAsync = ref.watch(placeAlertsProvider(place));

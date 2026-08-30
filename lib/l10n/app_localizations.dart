@@ -395,6 +395,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'POOR AIR QUALITY'**
   String get alertAirQuality;
+
+  /// No description provided for @alertsSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alertsSetting;
+
+  /// No description provided for @on.
+  ///
+  /// In en, this message translates to:
+  /// **'ON'**
+  String get on;
+
+  /// No description provided for @off.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF'**
+  String get off;
 }
 
 class _AppLocalizationsDelegate

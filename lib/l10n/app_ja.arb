@@ -52,5 +52,8 @@
   "alertCold": "厳寒注意",
   "alertFog": "霧の予想",
   "alertUv": "紫外線が強い",
-  "alertAirQuality": "大気汚染注意"
+  "alertAirQuality": "大気汚染注意",
+  "alertsSetting": "アラート",
+  "on": "オン",
+  "off": "オフ"
 }

@@ -152,4 +152,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'ПЛОХОЕ КАЧЕСТВО ВОЗДУХА';
+
+  @override
+  String get alertsSetting => 'Оповещения';
+
+  @override
+  String get on => 'ВКЛ';
+
+  @override
+  String get off => 'ВЫКЛ';
 }

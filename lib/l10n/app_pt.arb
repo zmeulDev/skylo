@@ -52,5 +52,8 @@
   "alertCold": "FRIO EXTREMO",
   "alertFog": "NEBLINA PREVISTA",
   "alertUv": "ÍNDICE UV ALTO",
-  "alertAirQuality": "QUALIDADE DO AR BAIXA"
+  "alertAirQuality": "QUALIDADE DO AR BAIXA",
+  "alertsSetting": "Alertas",
+  "on": "ON",
+  "off": "OFF"
 }

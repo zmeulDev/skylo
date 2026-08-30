@@ -52,5 +52,8 @@
   "alertCold": "FREDDO ESTREMO",
   "alertFog": "NEBBIA ATTESA",
   "alertUv": "INDICE UV ALTO",
-  "alertAirQuality": "QUALITÀ DELL'ARIA SCARSA"
+  "alertAirQuality": "QUALITÀ DELL'ARIA SCARSA",
+  "alertsSetting": "Avvisi",
+  "on": "ON",
+  "off": "OFF"
 }

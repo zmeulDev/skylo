@@ -11,6 +11,7 @@ import 'package:skylo/domain/entities/weather_entity.dart';
 import 'package:skylo/domain/repositories/weather_repository.dart';
 import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/alerts_providers.dart';
+import 'package:skylo/presentation/providers/alerts_settings_provider.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/providers/weather_providers.dart';
 import 'package:skylo/presentation/widgets/alert_banner.dart';
@@ -40,6 +41,15 @@ class _FakePrefs implements SharedPreferencesAsync {
   @override
   Future<bool> clear({Set<String>? allowList}) async {
     _data.clear();
+    return true;
+  }
+
+  @override
+  Future<bool?> getBool(String key) async => _data[key] as bool?;
+
+  @override
+  Future<bool> setBool(String key, bool value) async {
+    _data[key] = value;
     return true;
   }
 
@@ -104,35 +114,30 @@ class _FakeUvAir extends UvAirDataSource {
 }
 
 void main() {
-  testWidgets('AlertBanner shows storm, gust, UV, AQI alerts',
+  testWidgets('AlertBanner hidden when alerts are off (default)',
       (tester) async {
     final prefs = _FakePrefs();
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          weatherRepositoryProvider.overrideWithValue(_FakeRepository()),
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          uvAirDataSourceProvider.overrideWithValue(_FakeUvAir()),
-        ],
-        child: MaterialApp(
-          theme: cachedLightTheme,
-          locale: const Locale('en'),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: Scaffold(
-              body: AlertBanner(place: SavedPlace.current())),
-        ),
-      ),
-    );
+    await tester.pumpWidget(_app(prefs));
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text('THUNDERSTORM EXPECTED'), findsNothing);
+  });
+
+  testWidgets('AlertBanner shows storm, gust, heat alerts when enabled',
+      (tester) async {
+    final prefs = _FakePrefs();
+
+    await tester.pumpWidget(_app(prefs));
+
+    // Alerts are opt-in: turn them on like the settings row does.
+    final container = ProviderScope.containerOf(
+        tester.element(find.byType(AlertBanner)));
+    await container.read(alertsEnabledProvider.notifier).set(true);
+    await tester.pump();
 
     // Let the localization delegate and providers resolve.
-    await tester.pump();
     await tester.pumpAndSettle();
     await tester.pump(const Duration(milliseconds: 200));
     await tester.pumpAndSettle();
@@ -144,4 +149,26 @@ void main() {
     expect(find.text('STRONG GUSTS EXPECTED'), findsOneWidget);
     expect(find.text('HEAT WATCH'), findsOneWidget);
   });
+}
+
+Widget _app(_FakePrefs prefs) {
+  return ProviderScope(
+    overrides: [
+      weatherRepositoryProvider.overrideWithValue(_FakeRepository()),
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      uvAirDataSourceProvider.overrideWithValue(_FakeUvAir()),
+    ],
+    child: MaterialApp(
+      theme: cachedLightTheme,
+      locale: const Locale('en'),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: Scaffold(body: AlertBanner(place: SavedPlace.current())),
+    ),
+  );
 }

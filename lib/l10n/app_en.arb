@@ -52,5 +52,8 @@
   "alertCold": "COLD WATCH",
   "alertFog": "FOG EXPECTED",
   "alertUv": "HIGH UV TODAY",
-  "alertAirQuality": "POOR AIR QUALITY"
+  "alertAirQuality": "POOR AIR QUALITY",
+  "alertsSetting": "Alerts",
+  "on": "ON",
+  "off": "OFF"
 }

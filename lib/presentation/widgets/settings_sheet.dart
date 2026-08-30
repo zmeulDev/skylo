@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
 import 'package:skylo/l10n/app_localizations.dart';
+import 'package:skylo/presentation/providers/alerts_settings_provider.dart';
 import 'package:skylo/presentation/providers/locale_providers.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/providers/units_providers.dart';
@@ -87,6 +88,18 @@ class _SettingsSheet extends ConsumerWidget {
                 ref
                     .read(unitsProvider.notifier)
                     .toggle(locale);
+              },
+            ),
+            const SizedBox(height: 12),
+            _SettingsRow(
+              icon: Icons.warning_amber_outlined,
+              title: l10n.alertsSetting,
+              trailing: Text(
+                ref.watch(alertsEnabledProvider) ? l10n.on : l10n.off,
+                style: _stateStyle(context),
+              ),
+              onTap: () {
+                ref.read(alertsEnabledProvider.notifier).toggle();
               },
             ),
             const SizedBox(height: 12),

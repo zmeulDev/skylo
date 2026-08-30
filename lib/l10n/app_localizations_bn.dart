@@ -152,4 +152,13 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'বায়ুর গুণমান খারাপ';
+
+  @override
+  String get alertsSetting => 'সতর্কতা';
+
+  @override
+  String get on => 'চালু';
+
+  @override
+  String get off => 'বন্ধ';
 }

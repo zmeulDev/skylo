@@ -152,4 +152,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get alertAirQuality => 'QUALITÉ DE L\'AIR MÉDIOCRE';
+
+  @override
+  String get alertsSetting => 'Alertes';
+
+  @override
+  String get on => 'OUI';
+
+  @override
+  String get off => 'NON';
 }

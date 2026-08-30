@@ -63,6 +63,15 @@ class _FakePrefs implements SharedPreferencesAsync {
   Future<String?> getString(String key) async => _store[key] as String?;
 
   @override
+  Future<bool?> getBool(String key) async => _store[key] as bool?;
+
+  @override
+  Future<bool> setBool(String key, bool? value) async {
+    _store[key] = value ?? false;
+    return true;
+  }
+
+  @override
   dynamic noSuchMethod(Invocation invocation) async => null;
 }
 

@@ -52,5 +52,8 @@
   "alertCold": "कड़ाके की ठंड",
   "alertFog": "कोहरा संभव",
   "alertUv": "यूवी सूचकांक अधिक",
-  "alertAirQuality": "वायु गुणवत्ता खराब"
+  "alertAirQuality": "वायु गुणवत्ता खराब",
+  "alertsSetting": "अलर्ट",
+  "on": "चालू",
+  "off": "बंद"
 }

@@ -52,5 +52,8 @@
   "alertCold": "FROID EXTRÊME",
   "alertFog": "BROUILLARD PRÉVU",
   "alertUv": "INDICE UV ÉLEVÉ",
-  "alertAirQuality": "QUALITÉ DE L'AIR MÉDIOCRE"
+  "alertAirQuality": "QUALITÉ DE L'AIR MÉDIOCRE",
+  "alertsSetting": "Alertes",
+  "on": "OUI",
+  "off": "NON"
 }

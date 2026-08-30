@@ -52,5 +52,8 @@
   "alertCold": "তীব্র শীত",
   "alertFog": "কুয়াশা সম্ভাব্য",
   "alertUv": "ইউভি সূচক বেশি",
-  "alertAirQuality": "বায়ুর গুণমান খারাপ"
+  "alertAirQuality": "বায়ুর গুণমান খারাপ",
+  "alertsSetting": "সতর্কতা",
+  "on": "চালু",
+  "off": "বন্ধ"
 }
