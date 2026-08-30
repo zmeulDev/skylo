@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/dock_badge_provider.dart';
 import 'package:skylo/presentation/providers/locale_providers.dart';
+import 'package:skylo/presentation/providers/location_revalidation_provider.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/screens/home_screen.dart';
 
@@ -19,6 +20,7 @@ class SkyloApp extends ConsumerWidget {
     final mode = ref.watch(themeModeProvider);
     final localeOverride = ref.watch(localeProvider);
     ref.watch(dockBadgeProvider);
+    ref.watch(locationRevalidationProvider);
 
     return MaterialApp(
       title: 'Skylo — Know your sky.',

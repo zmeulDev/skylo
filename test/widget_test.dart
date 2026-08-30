@@ -44,6 +44,11 @@ class _FakeRepository implements WeatherRepository {
   Future<WeatherEntity> getWeatherForLocation(double lat, double lon,
           {String lang = 'en'}) async =>
       getCurrentLocationWeather();
+
+  @override
+  Future<WeatherEntity?> revalidateCurrentLocation(
+          {String lang = 'en'}) async =>
+      null;
 }
 
 class _FakePrefs implements SharedPreferencesAsync {
