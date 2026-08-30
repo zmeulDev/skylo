@@ -48,6 +48,14 @@ Skylo work and for the trip app. Update as new findings come in.
 - **Bundle IDs**: keep com.zmeul.skylo in sync across iOS pbxproj, Android
   build.gradle.kts (namespace + applicationId), and MainActivity.kt package
   path. A mismatch = monkey launcher "No activities found".
+- **OWM city names are coarse**: the 2.5 weather response's `name` snaps
+  villages to nearby towns in OWM's index (Jucu de Sus read as "Apahida"
+  while the GPS fix was correct — Google Maps knew the village). Fix:
+  resolve the current-location name with the platform geocoder
+  (`geocoding` package: Android Geocoder / Apple CLGeocoder, same data
+  Google Maps uses) in `platform_geocoder.dart`, override OWM's name only
+  when they disagree. Geocoding plugin v5 is instance-based
+  (`Geocoding().placemarkFromCoordinates`), no top-level functions.
 
 ## Open items / future ideas (from testing backlog)
 
