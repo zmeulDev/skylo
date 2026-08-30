@@ -34,14 +34,19 @@ class AlertBanner extends ConsumerWidget {
         return a.kind.index.compareTo(b.kind.index);
       });
 
-    return Column(
-      children: [
-        for (final alert in sorted.take(3))
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _AlertRow(alert: alert, theme: theme, l10n: l10n),
-          ),
-      ],
+    return Padding(
+      // Breathing room under the current-weather block; collapses to
+      // nothing when the banner is hidden so no stray gap remains.
+      padding: const EdgeInsets.only(top: 28),
+      child: Column(
+        children: [
+          for (final alert in sorted.take(3))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _AlertRow(alert: alert, theme: theme, l10n: l10n),
+            ),
+        ],
+      ),
     );
   }
 }
