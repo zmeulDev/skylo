@@ -1,4 +1,4 @@
-package com.example.skylo
+package com.zmeul.skylo
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -185,14 +185,17 @@ class _DayTimeline extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 44,
-                  child: Text(
-                    h.precipitationProbability >= 1
-                        ? '${h.precipitationProbability.round()}%'
-                        : '—',
-                    textAlign: TextAlign.right,
-                    style: AppText.tabular(context)
-                        .copyWith(color: context.skylo.muted),
+                  width: 48,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      h.precipitationProbability >= 1
+                          ? '${h.precipitationProbability.round()}%'
+                          : '—',
+                      style: AppText.tabular(context)
+                          .copyWith(color: context.skylo.muted),
+                    ),
                   ),
                 ),
               ],

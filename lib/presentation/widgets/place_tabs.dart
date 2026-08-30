@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skylo/domain/entities/saved_place.dart';
 import 'package:skylo/presentation/providers/saved_places_providers.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
+import 'package:skylo/presentation/widgets/anim/entrance.dart';
 
 /// Minimal place tabs: ALL CAPS labels, active in ink, inactive in muted.
 /// The 2px red underline physically slides between tabs.
@@ -284,14 +285,21 @@ class _Results extends ConsumerWidget {
     return results.when(
       loading: () => Padding(
         padding: const EdgeInsets.only(top: 24),
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: context.skylo.accent,
-            backgroundColor: context.skylo.hairline,
-          ),
+        // Skeleton rows — hairline bars pulsing, no spinners (DESIGN.md §6).
+        child: Column(
+          children: [
+            for (var i = 0; i < 3; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Row(
+                  children: [
+                    Expanded(child: SkeletonPulse(width: double.infinity, height: 16)),
+                    const SizedBox(width: 16),
+                    const SkeletonPulse(width: 32, height: 16),
+                  ],
+                ),
+              ),
+          ],
         ),
       ),
       error: (e, _) => Padding(

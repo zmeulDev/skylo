@@ -38,21 +38,22 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
       });
 }
 
-extension SkyloThemeDataX on ThemeMode {
-  ThemeData toThemeData() {
-    final tokens = this == ThemeMode.dark ? SkyloTheme.dark : SkyloTheme.light;
-    final scheme = ColorScheme.fromSeed(
-      seedColor: tokens.accent,
-      surface: tokens.surface,
-      brightness:
-          this == ThemeMode.dark ? Brightness.dark : Brightness.light,
-    );
-    return ThemeData(
-      useMaterial3: true,
-      brightness: scheme.brightness,
-      colorScheme: scheme,
-      scaffoldBackgroundColor: tokens.surface,
-      extensions: [tokens],
-    );
-  }
+/// Built once and cached — rebuilding ThemeData on every widget rebuild
+/// forces the whole tree to re-inherit the theme and janks animations.
+final cachedLightTheme = _buildTheme(SkyloTheme.light, Brightness.light);
+final cachedDarkTheme = _buildTheme(SkyloTheme.dark, Brightness.dark);
+
+ThemeData _buildTheme(SkyloTheme tokens, Brightness brightness) {
+  final scheme = ColorScheme.fromSeed(
+    seedColor: tokens.accent,
+    surface: tokens.surface,
+    brightness: brightness,
+  );
+  return ThemeData(
+    useMaterial3: true,
+    brightness: scheme.brightness,
+    colorScheme: scheme,
+    scaffoldBackgroundColor: tokens.surface,
+    extensions: [tokens],
+  );
 }

@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:skylo/domain/exceptions/location_permission_exception.dart';
 
 class LocationService {
+  /// Resolves fast: cached last-known position first (instant), fresh GPS
+  /// fix only when nothing is cached (cold start).
   Future<({double latitude, double longitude})> getCurrentLocation() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     debugPrint('[Skylo] Location services enabled: $serviceEnabled');
@@ -13,7 +15,8 @@ class LocationService {
     debugPrint('[Skylo] Location permission (initial): ${permission.name}');
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      debugPrint('[Skylo] Location permission (after request): ${permission.name}');
+      debugPrint(
+          '[Skylo] Location permission (after request): ${permission.name}');
     }
     if (permission == LocationPermission.denied) {
       throw const LocationPermissionException(false);
@@ -22,22 +25,21 @@ class LocationService {
       throw const LocationPermissionException(true);
     }
 
-    try {
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings:
-            const LocationSettings(accuracy: LocationAccuracy.lowest),
-      ).timeout(const Duration(seconds: 20));
-      debugPrint('[Skylo] Position: ${position.latitude}, ${position.longitude}');
-      return (latitude: position.latitude, longitude: position.longitude);
-    } on TimeoutException {
-      debugPrint('[Skylo] Fresh position timed out; trying last known');
-      final last = await Geolocator.getLastKnownPosition();
-      if (last != null) {
-        debugPrint('[Skylo] Using last known: ${last.latitude}, ${last.longitude}');
-        return (latitude: last.latitude, longitude: last.longitude);
-      }
-      debugPrint('[Skylo] No last known position available');
-      rethrow;
+    // Fast path: cached position, even if stale — weather for "here" is
+    // better shown now than a spinner for 20 seconds.
+    final last = await Geolocator.getLastKnownPosition();
+    if (last != null) {
+      debugPrint(
+          '[Skylo] Using last known: ${last.latitude}, ${last.longitude}');
+      return (latitude: last.latitude, longitude: last.longitude);
     }
+
+    // Cold start: no cache, need a fresh fix.
+    final position = await Geolocator.getCurrentPosition(
+      locationSettings:
+          const LocationSettings(accuracy: LocationAccuracy.lowest),
+    ).timeout(const Duration(seconds: 20));
+    debugPrint('[Skylo] Position: ${position.latitude}, ${position.longitude}');
+    return (latitude: position.latitude, longitude: position.longitude);
   }
 }

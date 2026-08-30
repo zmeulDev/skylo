@@ -14,8 +14,16 @@ class ThemeToggle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode = ref.watch(themeModeProvider);
-    final isDark = mode == ThemeMode.dark;
+    // Resolve `system` against the platform, otherwise the effective
+    // brightness is invisible to the branch below.
+    final platformDark =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
+    final isDark = switch (ref.watch(themeModeProvider)) {
+      ThemeMode.dark => true,
+      ThemeMode.light => false,
+      ThemeMode.system => platformDark,
+    };
 
     return GestureDetector(
       onTap: () => _revealTransition(context, ref, !isDark),
@@ -42,7 +50,8 @@ class ThemeToggle extends ConsumerWidget {
       BuildContext context, WidgetRef ref, bool toDark) async {
     final origin = _toggleOrigin(context);
     if (origin == null) {
-      ref.read(themeModeProvider.notifier).toggle();
+      ref.read(themeModeProvider.notifier).set(
+          toDark ? ThemeMode.dark : ThemeMode.light);
       return;
     }
 
@@ -50,7 +59,8 @@ class ThemeToggle extends ConsumerWidget {
         Overlay.maybeOf(context, rootOverlay: true)?.context.findRenderObject()
             as RenderBox?;
     if (overlay == null) {
-      ref.read(themeModeProvider.notifier).toggle();
+      ref.read(themeModeProvider.notifier).set(
+          toDark ? ThemeMode.dark : ThemeMode.light);
       return;
     }
 
@@ -71,7 +81,9 @@ class ThemeToggle extends ConsumerWidget {
 
     // Let the circle finish expanding before swapping underneath.
     await Future<void>.delayed(const Duration(milliseconds: 340));
-    ref.read(themeModeProvider.notifier).toggle();
+    ref
+        .read(themeModeProvider.notifier)
+        .set(toDark ? ThemeMode.dark : ThemeMode.light);
     await Future<void>.delayed(const Duration(milliseconds: 260));
     overlayEntry.remove();
   }
