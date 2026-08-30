@@ -10,6 +10,23 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
+    let channel = FlutterMethodChannel(
+      name: "skylo/dockBadge",
+      binaryMessenger: flutterViewController.engine.binaryMessenger)
+    channel.setMethodCallHandler { (call, result) in
+      switch call.method {
+      case "setBadge":
+        let label = (call.arguments as? [String: Any])?["label"] as? String
+        NSApplication.shared.dockTile.badgeLabel = label ?? ""
+        result(nil)
+      case "clearBadge":
+        NSApplication.shared.dockTile.badgeLabel = nil
+        result(nil)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+
     super.awakeFromNib()
   }
 }

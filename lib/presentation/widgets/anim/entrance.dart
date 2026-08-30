@@ -156,8 +156,10 @@ class WeatherSkeleton extends StatelessWidget {
         child: SizedBox(
           width: width,
           child: ListView(
-            padding: EdgeInsets.fromLTRB(
-                32, compact ? 48 : 72, 32, compact ? 48 : 96),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.viewPaddingOf(context).bottom,
+            ).add(EdgeInsets.fromLTRB(
+                32, compact ? 48 : 72, 32, compact ? 48 : 96)),
             children: [
               // Header.
               SkeletonPulse(

@@ -81,6 +81,11 @@ class OpenWeatherRemoteDataSource {
     Map<String, dynamic> forecast,
   ) {
     final list = forecast['list'] as List<dynamic>? ?? const [];
+    // The 2.5 endpoints expose the place's UTC offset as `timezone`
+    // (seconds). Both responses agree; prefer the forecast one.
+    final tzOffset = ((forecast['timezone'] as num?) ??
+            (current['timezone'] as num?) ?? 0)
+        .toInt();
 
     final hourly = list
         .map((entry) => {
@@ -91,12 +96,19 @@ class OpenWeatherRemoteDataSource {
             })
         .toList();
 
-    // Group 3-hour entries into local days.
+    // Group 3-hour entries into the place's own local days.
+    // Wall-clock semantics: strip the UTC identity after shifting.
+    DateTime placeTime(num dt) {
+      final shifted =
+          DateTime.fromMillisecondsSinceEpoch((dt * 1000).toInt(), isUtc: true)
+              .add(Duration(seconds: tzOffset));
+      return DateTime(
+          shifted.year, shifted.month, shifted.day, shifted.hour);
+    }
+
     final days = <DateTime, List<Map<String, dynamic>>>{};
     for (final entry in list) {
-      final time = DateTime.fromMillisecondsSinceEpoch(
-          ((entry['dt'] as num) * 1000).toInt(),
-          isUtc: true);
+      final time = placeTime(entry['dt'] as num);
       final day = DateTime(time.year, time.month, time.day);
       days.putIfAbsent(day, () => []).add(entry as Map<String, dynamic>);
     }
@@ -116,9 +128,7 @@ class OpenWeatherRemoteDataSource {
         if (tMax > max) max = tMax;
         if (tMin < min) min = tMin;
 
-        final time = DateTime.fromMillisecondsSinceEpoch(
-            ((entry['dt'] as num) * 1000).toInt(),
-            isUtc: true);
+        final time = placeTime(entry['dt'] as num);
         final distance = (time.hour - 12).abs().toDouble();
         if (distance < middayDistance) {
           middayDistance = distance;
@@ -127,7 +137,7 @@ class OpenWeatherRemoteDataSource {
         }
       }
       daily.add({
-        'dt': (day.millisecondsSinceEpoch ~/ 1000) + 43200, // midday UTC
+        'dt': (day.millisecondsSinceEpoch ~/ 1000) + 43200, // midday local
         'temp': {'max': max, 'min': min},
         'weather': [middayWeather],
       });
@@ -135,6 +145,7 @@ class OpenWeatherRemoteDataSource {
 
     return {
       'timezone': current['name'],
+      'timezone_offset': tzOffset,
       'current': {
         'dt': current['dt'],
         'temp': (current['main'] as Map<String, dynamic>)['temp'],

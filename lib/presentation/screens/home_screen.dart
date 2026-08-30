@@ -47,46 +47,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       backgroundColor: context.skylo.surface,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: PlaceTabs(
-                    places: places,
-                    index: _page.clamp(0, places.length - 1),
-                    onTap: (i) {
-                      _pageController.animateToPage(
-                        i,
-                        duration: const Duration(milliseconds: 350),
-                        curve: Curves.easeOutCubic,
-                      );
-                    },
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PlaceTabs(
+                      places: places,
+                      index: _page.clamp(0, places.length - 1),
+                      onTap: (i) {
+                        _pageController.animateToPage(
+                          i,
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeOutCubic,
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                const UnitsToggle(),
-                const SizedBox(width: 16),
-                const ThemeToggle(),
-              ],
+                  const SizedBox(width: 16),
+                  const UnitsToggle(),
+                  const SizedBox(width: 16),
+                  const ThemeToggle(),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: places.length,
-              onPageChanged: (i) => setState(() => _page = i),
-              itemBuilder: (context, i) {
-                return AnimatedBuilder(
-                  animation: _pageController,
-                  builder: (context, child) {
-                    // Parallax: page shifts up to ±28px horizontally as it
-                    // leaves/enters during a swipe.
-                    double parallax = 0;
-                    if (_pageController.position.haveDimensions) {
-                      final page = _pageController.page ?? i.toDouble();
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: places.length,
+                onPageChanged: (i) => setState(() => _page = i),
+                itemBuilder: (context, i) {
+                  return AnimatedBuilder(
+                    animation: _pageController,
+                    builder: (context, child) {
+                      // Parallax: page shifts up to ±28px horizontally as it
+                      // leaves/enters during a swipe.
+                      double parallax = 0;
+                      if (_pageController.position.haveDimensions) {
+                        final page = _pageController.page ?? i.toDouble();
                       parallax = (i - page) * 28;
                     } else {
                       parallax = (i - _page) * 28.0;
@@ -102,6 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -146,6 +149,8 @@ class _WeatherContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // City-local "now" drives Today/Tomorrow labels and hour filtering.
+    final cityNow = weather.localNow();
     return LayoutBuilder(builder: (context, constraints) {
       final compact = constraints.maxWidth < 700;
       final width = compact ? constraints.maxWidth : 680.0;
@@ -153,8 +158,10 @@ class _WeatherContent extends StatelessWidget {
         child: SizedBox(
           width: width,
           child: ListView(
-            padding: EdgeInsets.fromLTRB(
-                32, compact ? 48 : 72, 32, compact ? 48 : 96),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.viewPaddingOf(context).bottom,
+            ).add(EdgeInsets.fromLTRB(
+                32, compact ? 48 : 72, 32, compact ? 48 : 96)),
             children: [
               StaggeredEntrance(
                 animateKey: place.id,
@@ -182,7 +189,11 @@ class _WeatherContent extends StatelessWidget {
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 3,
-                child: _HourlyTable(hourly: weather.hourly, animateKey: place.id),
+                child: _HourlyTable(
+                  hourly: weather.hourly,
+                  animateKey: place.id,
+                  localNow: cityNow,
+                ),
               ),
               SizedBox(height: compact ? 48 : 72),
               StaggeredEntrance(
@@ -199,7 +210,7 @@ class _WeatherContent extends StatelessWidget {
               StaggeredEntrance(
                 animateKey: place.id,
                 index: 5,
-                child: _DailyTable(daily: weather.daily),
+                child: _DailyTable(daily: weather.daily, localNow: cityNow),
               ),
               SizedBox(height: compact ? 32 : 56),
               StaggeredEntrance(
@@ -231,8 +242,12 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
+    // City-local time, not the viewer's.
+    final now = weather.localNow();
     final title = weather.locationName.isEmpty ? place.label : weather.locationName;
+    // Show the local clock for every saved city; only your own location
+    // omits it (your clock is already in your pocket).
+    final showClock = !place.isCurrentLocation;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -246,7 +261,8 @@ class _Header extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                DateFormat('EEEE, d MMMM').format(now),
+                '${DateFormat('EEEE, d MMMM').format(now)}'
+                '${showClock ? ' · ${DateFormat('HH:mm').format(now)}' : ''}',
                 style: AppText.condition(context).copyWith(fontSize: 15),
               ),
             ],
@@ -321,8 +337,13 @@ class _CurrentBlock extends ConsumerWidget {
 class _HourlyTable extends ConsumerWidget {
   final List<HourlyForecast> hourly;
   final Object animateKey;
+  final DateTime localNow;
 
-  const _HourlyTable({required this.hourly, required this.animateKey});
+  const _HourlyTable({
+    required this.hourly,
+    required this.animateKey,
+    required this.localNow,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -330,7 +351,11 @@ class _HourlyTable extends ConsumerWidget {
       return Text('No hourly data', style: AppText.body(context));
     }
     final units = ref.watch(unitsProvider);
-    final rows = hourly.take(8).toList();
+    // Show the next 8 slots from the city's current time, not the viewer's.
+    final cutoff = DateTime(
+        localNow.year, localNow.month, localNow.day, localNow.hour);
+    final rows = hourly.where((h) => !h.time.isBefore(cutoff)).take(8).toList();
+    if (rows.isEmpty) return const SizedBox.shrink();
     final minTemp = rows.map((r) => r.temp).reduce((a, b) => a < b ? a : b);
     final maxTemp = rows.map((r) => r.temp).reduce((a, b) => a > b ? a : b);
     return Column(
@@ -389,8 +414,9 @@ class _HourlyTable extends ConsumerWidget {
 
 class _DailyTable extends ConsumerWidget {
   final List<DailyForecast> daily;
+  final DateTime localNow;
 
-  const _DailyTable({required this.daily});
+  const _DailyTable({required this.daily, required this.localNow});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -398,7 +424,7 @@ class _DailyTable extends ConsumerWidget {
       return Text('No daily data', style: AppText.body(context));
     }
     final units = ref.watch(unitsProvider);
-    final today = DateTime.now().day;
+    final today = localNow.day;
     return Column(
       children: [
         for (final day in daily)
@@ -457,8 +483,7 @@ class _DailyTable extends ConsumerWidget {
   }
 
   String _dayLabel(DateTime date) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    final today = DateTime(localNow.year, localNow.month, localNow.day);
     final diff = date.difference(today).inDays;
     if (diff == 0) return 'Today';
     if (diff == 1) return 'Tomorrow';

@@ -43,7 +43,10 @@ class _DayDetailSheet extends ConsumerWidget {
 
     return Padding(
       padding:
-          EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+          EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom +
+                MediaQuery.viewPaddingOf(context).bottom,
+          ),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 640),
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 40),

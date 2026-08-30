@@ -7,6 +7,7 @@ class WeatherEntity {
   final String condition;
   final int weatherCode;
   final String locationName;
+  final int timeZoneOffsetSeconds;
   final List<HourlyForecast> hourly;
   final List<DailyForecast> daily;
 
@@ -16,6 +17,7 @@ class WeatherEntity {
     required this.condition,
     required this.weatherCode,
     this.locationName = '',
+    this.timeZoneOffsetSeconds = 0,
     required this.hourly,
     required this.daily,
   });
@@ -25,6 +27,16 @@ class WeatherEntity {
 
   double feelsLikeIn(WeatherUnits units) =>
       units.convertTemp(feelsLikeTemp);
+
+  /// Current wall-clock time at the place this weather belongs to.
+  /// Plain wall-clock value (no offset identity) so `.day`/`.hour` read
+  /// the place's local calendar fields.
+  DateTime localNow() {
+    final shifted =
+        DateTime.now().toUtc().add(Duration(seconds: timeZoneOffsetSeconds));
+    return DateTime(
+        shifted.year, shifted.month, shifted.day, shifted.hour, shifted.minute);
+  }
 }
 
 enum WeatherUnits { metric, imperial }

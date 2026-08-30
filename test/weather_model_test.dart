@@ -80,11 +80,20 @@ void main() {
     final total = model.daily.fold<int>(0, (sum, d) => sum + d.hours.length);
     expect(total, 24);
     expect(model.daily.first.hours, isNotEmpty);
+    // Every hour belongs to exactly one day, and that day's date matches
+    // the hour's wall-clock calendar date.
+    final bucketedByHourDate = <String, int>{};
     for (final day in model.daily) {
       for (final hour in day.hours) {
-        expect(hour.time.day, day.date.day);
+        final key =
+            '${hour.time.year}-${hour.time.month}-${hour.time.day}';
+        bucketedByHourDate[key] = (bucketedByHourDate[key] ?? 0) + 1;
+        expect(day.date.day, hour.time.day,
+            reason: 'hour ${hour.time} landed in day ${day.date}');
       }
     }
+    // 24 sequential hourly entries span at most 2 calendar dates.
+    expect(bucketedByHourDate.length, lessThanOrEqualTo(2));
   });
 
   test('toJson round-trips scalar fields', () {

@@ -12,6 +12,7 @@ class WeatherModel extends WeatherEntity {
     required super.condition,
     required super.weatherCode,
     super.locationName,
+    super.timeZoneOffsetSeconds,
     required super.hourly,
     required super.daily,
   });
@@ -20,13 +21,24 @@ class WeatherModel extends WeatherEntity {
     final current = json['current'] as Map<String, dynamic>;
     final hourlyJson = json['hourly'] as List<dynamic>? ?? const [];
     final dailyJson = json['daily'] as List<dynamic>? ?? const [];
+    final tzOffset =
+        ((json['timezone_offset'] as num?) ?? 0).toInt();
+
+    // Interpret every timestamp in the place's own wall-clock time so
+    // hourly lists and day buckets match what locals experience.
+    // The returned DateTime is a plain wall-clock value (no offset).
+    DateTime placeTime(num dt) {
+      final shifted = DateTime.fromMillisecondsSinceEpoch(
+        (dt * 1000).toInt(),
+        isUtc: true,
+      ).add(Duration(seconds: tzOffset));
+      return DateTime(shifted.year, shifted.month, shifted.day,
+          shifted.hour, shifted.minute);
+    }
 
     final hourly = hourlyJson
         .map((raw) => HourlyForecast(
-              time: DateTime.fromMillisecondsSinceEpoch(
-                ((raw['dt'] as num) * 1000).toInt(),
-                isUtc: true,
-              ).toLocal(),
+              time: placeTime(raw['dt'] as num),
               temp: (raw['temp'] as num).toDouble(),
               weatherCode: ((raw['weather'] as List<dynamic>).first['id'] as num).toInt(),
               precipitationProbability:
@@ -35,10 +47,7 @@ class WeatherModel extends WeatherEntity {
         .toList();
 
     final daily = dailyJson.map((raw) {
-      final date = DateTime.fromMillisecondsSinceEpoch(
-        ((raw['dt'] as num) * 1000).toInt(),
-        isUtc: true,
-      ).toLocal();
+      final date = placeTime(raw['dt'] as num);
       final dayStart = DateTime(date.year, date.month, date.day);
       return DailyForecast(
         date: date,
@@ -58,6 +67,7 @@ class WeatherModel extends WeatherEntity {
       condition: (current['weather'] as List<dynamic>).first['main'] as String,
       weatherCode: ((current['weather'] as List<dynamic>).first['id'] as num).toInt(),
       locationName: (json['timezone'] as String?) ?? '',
+      timeZoneOffsetSeconds: tzOffset,
       hourly: hourly,
       daily: daily,
     );

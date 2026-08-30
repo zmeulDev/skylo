@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skylo/presentation/providers/dock_badge_provider.dart';
 import 'package:skylo/presentation/providers/theme_providers.dart';
 import 'package:skylo/presentation/screens/home_screen.dart';
 import 'package:skylo/presentation/theme/app_theme.dart';
@@ -14,6 +15,7 @@ class SkyloApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(themeModeProvider);
+    ref.watch(dockBadgeProvider);
 
     return MaterialApp(
       title: 'Skylo — Know your sky.',

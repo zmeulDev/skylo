@@ -24,6 +24,38 @@ class PlaceTabs extends StatefulWidget {
 
 class _PlaceTabsState extends State<PlaceTabs> {
   final Map<int, GlobalKey> _keys = {};
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void didUpdateWidget(PlaceTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.index != widget.index) {
+      _scheduleEnsureVisible();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scheduleEnsureVisible() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final key = _keys[widget.index];
+      final ctx = key?.currentContext;
+      if (ctx == null) return;
+      final box = ctx.findRenderObject() as RenderBox?;
+      if (box == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.1,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,51 +75,58 @@ class _PlaceTabsState extends State<PlaceTabs> {
             }
             widths[i] = w;
           }
-          // Left offset of the active tab's indicator.
+          // Left offset of the active tab's indicator, minus scroll.
+          final scrollOffset = _scrollController.hasClients
+              ? _scrollController.offset
+              : 0.0;
           var activeLeft = 0.0;
           var activeWidth = 0.0;
           var seen = 0.0;
           for (var i = 0; i < widths.length; i++) {
             if (i == widget.index) {
-              activeLeft = seen;
+              activeLeft = seen - scrollOffset;
               activeWidth = widths[i]!;
               break;
             }
             seen += widths[i]! + 28;
           }
-          return Stack(
-            children: [
-              ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.places.length + 1,
-                separatorBuilder: (_, _) => const SizedBox(width: 28),
-                itemBuilder: (context, i) {
-                  if (i == widget.places.length) {
-                    return _AddTab(key: _keys[i]);
-                  }
-                  final place = widget.places[i];
-                  final active = i == widget.index;
-                  return _Tab(
-                    key: _keys[i],
-                    label: place.label.toUpperCase(),
-                    active: active,
-                    onTap: () => widget.onTap(i),
-                  );
-                },
-              ),
-              Positioned(
-                left: activeLeft,
-                width: activeWidth,
-                bottom: 0,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOutCubic,
-                  alignment: Alignment.center,
-                  height: 2,
-                  child: Container(width: 24, color: context.skylo.accent),
+          return ClipRect(
+            child: Stack(
+              children: [
+                ListView.separated(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.places.length + 1,
+                  separatorBuilder: (_, _) => const SizedBox(width: 28),
+                  itemBuilder: (context, i) {
+                    if (i == widget.places.length) {
+                      return _AddTab(key: _keys[i]);
+                    }
+                    final place = widget.places[i];
+                    final active = i == widget.index;
+                    return _Tab(
+                      key: _keys[i],
+                      label: place.label.toUpperCase(),
+                      active: active,
+                      onTap: () => widget.onTap(i),
+                    );
+                  },
                 ),
-              ),
-            ],
+                Positioned(
+                  left: activeLeft,
+                  width: activeWidth,
+                  bottom: 0,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    alignment: Alignment.center,
+                    height: 2,
+                    child: Container(
+                        width: 24, color: context.skylo.accent),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -183,7 +222,10 @@ class _AddPlaceSheetState extends ConsumerState<_AddPlaceSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+          EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom +
+                MediaQuery.viewPaddingOf(context).bottom,
+          ),
       child: Container(
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 40),
         constraints: const BoxConstraints(maxWidth: 640),
