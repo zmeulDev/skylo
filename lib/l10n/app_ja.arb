@@ -1,0 +1,47 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Skylo — あなたの空を知ろう。",
+  "currentLocation": "現在地",
+  "today": "今日",
+  "tomorrow": "明日",
+  "next24Hours": "今後24時間",
+  "fiveDayOutlook": "5日間の予報",
+  "noHourlyData": "時間ごとのデータなし",
+  "noDailyData": "日ごとのデータなし",
+  "feelsLike": "体感 {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "あなたの空を知ろう",
+  "addAPlace": "場所を追加",
+  "searchCity": "都市を検索",
+  "noPlacesFound": "場所が見つかりません。",
+  "searchFailed": "検索に失敗しました。接続を確認してください。",
+  "settings": "設定",
+  "theme": "テーマ",
+  "units": "単位",
+  "language": "言語",
+  "systemLanguage": "システム",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "ライト",
+  "dark": "ダーク",
+  "weatherUnavailable": "天気が取得できません",
+  "locationUnavailable": "現在地が取得できません",
+  "retry": "再試行",
+  "openSystemSettings": "システム設定を開く",
+  "rain": "雨",
+  "minLabel": "最低",
+  "maxLabel": "最高",
+  "threeHourSteps": "3時間ごと",
+  "noHourlyDetail": "この日の時間ごとの詳細はありません。",
+  "permissionDeniedMessage": "現地の天気を表示するには位置情報の許可が必要です。",
+  "permissionPermanentlyDeniedMessage": "Skylo の位置情報アクセスが無効です。システム設定 → プライバシーとセキュリティ → 位置情報サービス で有効にしてください。",
+  "apiKeyInvalid": "OpenWeatherMap が API キーを拒否しました (401)。キーが有効か確認してください。",
+  "rateLimited": "OpenWeatherMap のリクエスト制限を超えました。1分後に再試行してください。",
+  "networkError": "OpenWeatherMap に接続できません。接続を確認してください。"
+}

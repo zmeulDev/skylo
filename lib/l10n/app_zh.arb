@@ -1,0 +1,47 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Skylo — 了解你的天空。",
+  "currentLocation": "当前位置",
+  "today": "今天",
+  "tomorrow": "明天",
+  "next24Hours": "未来24小时",
+  "fiveDayOutlook": "5天预报",
+  "noHourlyData": "无逐小时数据",
+  "noDailyData": "无每日数据",
+  "feelsLike": "体感 {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "了解你的天空",
+  "addAPlace": "添加地点",
+  "searchCity": "搜索城市",
+  "noPlacesFound": "未找到地点。",
+  "searchFailed": "搜索失败。请检查网络连接。",
+  "settings": "设置",
+  "theme": "主题",
+  "units": "单位",
+  "language": "语言",
+  "systemLanguage": "系统",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "浅色",
+  "dark": "深色",
+  "weatherUnavailable": "天气信息不可用",
+  "locationUnavailable": "位置信息不可用",
+  "retry": "重试",
+  "openSystemSettings": "打开系统设置",
+  "rain": "降雨",
+  "minLabel": "最低",
+  "maxLabel": "最高",
+  "threeHourSteps": "3小时间隔",
+  "noHourlyDetail": "当天无逐小时详情。",
+  "permissionDeniedMessage": "Skylo 需要位置权限才能显示您当地的天气。",
+  "permissionPermanentlyDeniedMessage": "Skylo 的位置访问已禁用。请在 系统设置 → 隐私与安全 → 定位服务 中启用。",
+  "apiKeyInvalid": "OpenWeatherMap 拒绝了 API 密钥 (401)。请检查密钥是否有效。",
+  "rateLimited": "已超出 OpenWeatherMap 请求限制。请一分钟后重试。",
+  "networkError": "无法连接 OpenWeatherMap。请检查网络连接。"
+}

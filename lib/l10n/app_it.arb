@@ -1,0 +1,47 @@
+{
+  "@@locale": "it",
+  "appTitle": "Skylo — Conosci il tuo cielo.",
+  "currentLocation": "Posizione attuale",
+  "today": "Oggi",
+  "tomorrow": "Domani",
+  "next24Hours": "Prossime 24 ore",
+  "fiveDayOutlook": "Previsioni a 5 giorni",
+  "noHourlyData": "Nessun dato orario",
+  "noDailyData": "Nessun dato giornaliero",
+  "feelsLike": "PERCEPITI {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "CONOSCI IL TUO CIELO",
+  "addAPlace": "AGGIUNGI UN LUOGO",
+  "searchCity": "Cerca città",
+  "noPlacesFound": "Nessun luogo trovato.",
+  "searchFailed": "Ricerca non riuscita. Controlla la connessione.",
+  "settings": "IMPOSTAZIONI",
+  "theme": "Tema",
+  "units": "Unità",
+  "language": "Lingua",
+  "systemLanguage": "Sistema",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "CHIARO",
+  "dark": "SCURO",
+  "weatherUnavailable": "Meteo non disponibile",
+  "locationUnavailable": "Posizione non disponibile",
+  "retry": "RIPROVA",
+  "openSystemSettings": "APRI IMPOSTAZIONI DI SISTEMA",
+  "rain": "PIOGGIA",
+  "minLabel": "MIN",
+  "maxLabel": "MAX",
+  "threeHourSteps": "INTERVALLI DI 3 ORE",
+  "noHourlyDetail": "Nessun dettaglio orario per questo giorno.",
+  "permissionDeniedMessage": "Skylo richiede l'autorizzazione di localizzazione per mostrarti il meteo locale.",
+  "permissionPermanentlyDeniedMessage": "L'accesso alla posizione è disattivato per Skylo. Attivalo in Impostazioni sistema → Privacy e sicurezza → Servizi di localizzazione.",
+  "apiKeyInvalid": "OpenWeatherMap ha rifiutato la chiave API (401). Verifica che la chiave sia valida.",
+  "rateLimited": "Limite OpenWeatherMap superato. Riprova tra un minuto.",
+  "networkError": "Impossibile contattare OpenWeatherMap. Controlla la connessione."
+}

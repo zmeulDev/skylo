@@ -65,6 +65,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get language => 'Limbă';
 
   @override
+  String get systemLanguage => 'SISTEM';
+
+  @override
   String get celsiusUnit => '°C';
 
   @override

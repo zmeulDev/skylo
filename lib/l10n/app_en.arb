@@ -25,6 +25,7 @@
   "theme": "Theme",
   "units": "Units",
   "language": "Language",
+  "systemLanguage": "SYSTEM",
   "celsiusUnit": "°C",
   "fahrenheitUnit": "°F",
   "light": "LIGHT",

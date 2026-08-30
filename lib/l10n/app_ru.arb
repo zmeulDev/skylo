@@ -1,0 +1,47 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Skylo — Познай своё небо.",
+  "currentLocation": "Текущее местоположение",
+  "today": "Сегодня",
+  "tomorrow": "Завтра",
+  "next24Hours": "Следующие 24 часа",
+  "fiveDayOutlook": "Прогноз на 5 дней",
+  "noHourlyData": "Нет почасовых данных",
+  "noDailyData": "Нет ежедневных данных",
+  "feelsLike": "ОЩУЩАЕТСЯ {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "ПОЗНАЙ СВОЁ НЕБО",
+  "addAPlace": "ДОБАВИТЬ МЕСТО",
+  "searchCity": "Найти город",
+  "noPlacesFound": "Места не найдены.",
+  "searchFailed": "Поиск не удался. Проверьте подключение.",
+  "settings": "НАСТРОЙКИ",
+  "theme": "Тема",
+  "units": "Единицы",
+  "language": "Язык",
+  "systemLanguage": "Система",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "СВЕТЛАЯ",
+  "dark": "ТЁМНАЯ",
+  "weatherUnavailable": "Погода недоступна",
+  "locationUnavailable": "Местоположение недоступно",
+  "retry": "ПОВТОРИТЬ",
+  "openSystemSettings": "ОТКРЫТЬ НАСТРОЙКИ СИСТЕМЫ",
+  "rain": "ДОЖДЬ",
+  "minLabel": "МИН",
+  "maxLabel": "МАКС",
+  "threeHourSteps": "ШАГИ ПО 3 ЧАСА",
+  "noHourlyDetail": "Нет почасовых подробностей для этого дня.",
+  "permissionDeniedMessage": "Skylo требуется разрешение на геолокацию, чтобы показать вашу местную погоду.",
+  "permissionPermanentlyDeniedMessage": "Доступ к геолокации отключён для Skylo. Включите его в Настройках системы → Конфиденциальность и безопасность → Службы геолокации.",
+  "apiKeyInvalid": "OpenWeatherMap отклонил ключ API (401). Проверьте, действителен ли ключ.",
+  "rateLimited": "Превышен лимит OpenWeatherMap. Попробуйте через минуту.",
+  "networkError": "Не удалось связаться с OpenWeatherMap. Проверьте подключение."
+}

@@ -1,0 +1,47 @@
+{
+  "@@locale": "de",
+  "appTitle": "Skylo — Kenne deinen Himmel.",
+  "currentLocation": "Aktueller Standort",
+  "today": "Heute",
+  "tomorrow": "Morgen",
+  "next24Hours": "Nächste 24 Stunden",
+  "fiveDayOutlook": "5-Tage-Vorhersage",
+  "noHourlyData": "Keine Stundendaten",
+  "noDailyData": "Keine Tagesdaten",
+  "feelsLike": "GEFÜHLT {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "KENNE DEINEN HIMMEL",
+  "addAPlace": "ORT HINZUFÜGEN",
+  "searchCity": "Stadt suchen",
+  "noPlacesFound": "Keine Orte gefunden.",
+  "searchFailed": "Suche fehlgeschlagen. Prüfe deine Verbindung.",
+  "settings": "EINSTELLUNGEN",
+  "theme": "Design",
+  "units": "Einheiten",
+  "language": "Sprache",
+  "systemLanguage": "System",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "HELL",
+  "dark": "DUNKEL",
+  "weatherUnavailable": "Wetter nicht verfügbar",
+  "locationUnavailable": "Standort nicht verfügbar",
+  "retry": "WIEDERHOLEN",
+  "openSystemSettings": "SYSTEMEINSTELLUNGEN ÖFFNEN",
+  "rain": "REGEN",
+  "minLabel": "MIN",
+  "maxLabel": "MAX",
+  "threeHourSteps": "3-STUNDEN-SCHRITTE",
+  "noHourlyDetail": "Keine Stundendetails für diesen Tag.",
+  "permissionDeniedMessage": "Skylo benötigt die Standortberechtigung, um dein lokales Wetter anzuzeigen.",
+  "permissionPermanentlyDeniedMessage": "Der Standortzugriff für Skylo ist deaktiviert. Aktiviere ihn unter Systemeinstellungen → Datenschutz & Sicherheit → Standortdienste.",
+  "apiKeyInvalid": "OpenWeatherMap hat den API-Schlüssel abgelehnt (401). Prüfe, ob der Schlüssel gültig ist.",
+  "rateLimited": "OpenWeatherMap-Limit überschritten. Versuche es in einer Minute erneut.",
+  "networkError": "OpenWeatherMap konnte nicht erreicht werden. Prüfe deine Verbindung."
+}

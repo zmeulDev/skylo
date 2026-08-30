@@ -1,0 +1,47 @@
+{
+  "@@locale": "bn",
+  "appTitle": "Skylo — আপনার আকাশ জানুন।",
+  "currentLocation": "বর্তমান অবস্থান",
+  "today": "আজ",
+  "tomorrow": "আগামীকাল",
+  "next24Hours": "পরবর্তী ২৪ ঘণ্টা",
+  "fiveDayOutlook": "৫ দিনের পূর্বাভাস",
+  "noHourlyData": "ঘণ্টাভিত্তিক ডেটা নেই",
+  "noDailyData": "দৈনিক ডেটা নেই",
+  "feelsLike": "অনুভূত {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "আপনার আকাশ জানুন",
+  "addAPlace": "স্থান যোগ করুন",
+  "searchCity": "শহর খুঁজুন",
+  "noPlacesFound": "কোনো স্থান পাওয়া যায়নি।",
+  "searchFailed": "অনুসন্ধান ব্যর্থ। আপনার সংযোগ পরীক্ষা করুন।",
+  "settings": "সেটিংস",
+  "theme": "থিম",
+  "units": "একক",
+  "language": "ভাষা",
+  "systemLanguage": "সিস্টেম",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "লাইট",
+  "dark": "ডার্ক",
+  "weatherUnavailable": "আবহাওয়া পাওয়া যাচ্ছে না",
+  "locationUnavailable": "অবস্থান পাওয়া যাচ্ছে না",
+  "retry": "আবার চেষ্টা করুন",
+  "openSystemSettings": "সিস্টেম সেটিংস খুলুন",
+  "rain": "বৃষ্টি",
+  "minLabel": "ন্যূন",
+  "maxLabel": "সর্বোচ্চ",
+  "threeHourSteps": "৩ ঘণ্টার ব্যবধান",
+  "noHourlyDetail": "এই দিনের জন্য ঘণ্টাভিত্তিক বিবরণ নেই।",
+  "permissionDeniedMessage": "আপনার স্থানীয় আবহাওয়া দেখাতে Skylo-র লোকেশন অনুমতি প্রয়োজন।",
+  "permissionPermanentlyDeniedMessage": "Skylo-র লোকেশন অ্যাক্সেস বন্ধ। সিস্টেম সেটিংস → গোপনীয়তা ও নিরাপত্তা → লোকেশন পরিষেবা-তে চালু করুন।",
+  "apiKeyInvalid": "OpenWeatherMap API কী প্রত্যাখ্যান করেছে (401)। কীটি বৈধ কিনা পরীক্ষা করুন।",
+  "rateLimited": "OpenWeatherMap-এর সীমা ছাড়িয়ে গেছে। এক মিনিট পর আবার চেষ্টা করুন।",
+  "networkError": "OpenWeatherMap-এ পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।"
+}

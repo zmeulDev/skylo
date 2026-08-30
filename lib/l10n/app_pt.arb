@@ -1,0 +1,47 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Skylo — Conheça o seu céu.",
+  "currentLocation": "Localização atual",
+  "today": "Hoje",
+  "tomorrow": "Amanhã",
+  "next24Hours": "Próximas 24 horas",
+  "fiveDayOutlook": "Previsão de 5 dias",
+  "noHourlyData": "Sem dados por hora",
+  "noDailyData": "Sem dados diários",
+  "feelsLike": "SENSAÇÃO {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "CONHEÇA O SEU CÉU",
+  "addAPlace": "ADICIONAR LOCAL",
+  "searchCity": "Pesquisar cidade",
+  "noPlacesFound": "Nenhum local encontrado.",
+  "searchFailed": "A pesquisa falhou. Verifique sua conexão.",
+  "settings": "AJUSTES",
+  "theme": "Tema",
+  "units": "Unidades",
+  "language": "Idioma",
+  "systemLanguage": "Sistema",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "CLARO",
+  "dark": "ESCURO",
+  "weatherUnavailable": "Clima indisponível",
+  "locationUnavailable": "Localização indisponível",
+  "retry": "TENTAR NOVAMENTE",
+  "openSystemSettings": "ABRIR AJUSTES DO SISTEMA",
+  "rain": "CHUVA",
+  "minLabel": "MÍN",
+  "maxLabel": "MÁX",
+  "threeHourSteps": "INTERVALOS DE 3 HORAS",
+  "noHourlyDetail": "Sem detalhes por hora para este dia.",
+  "permissionDeniedMessage": "A Skylo precisa de permissão de localização para mostrar o clima local.",
+  "permissionPermanentlyDeniedMessage": "O acesso à localização está desativado para a Skylo. Ative-o em Ajustes do sistema → Privacidade e segurança → Serviços de localização.",
+  "apiKeyInvalid": "A OpenWeatherMap rejeitou a chave da API (401). Verifique se a chave é válida.",
+  "rateLimited": "Limite da OpenWeatherMap excedido. Tente novamente em um minuto.",
+  "networkError": "Não foi possível contatar a OpenWeatherMap. Verifique sua conexão."
+}

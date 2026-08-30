@@ -1,0 +1,47 @@
+{
+  "@@locale": "hi",
+  "appTitle": "Skylo — अपने आकाश को जानें।",
+  "currentLocation": "वर्तमान स्थान",
+  "today": "आज",
+  "tomorrow": "कल",
+  "next24Hours": "अगले 24 घंटे",
+  "fiveDayOutlook": "5 दिन का पूर्वानुमान",
+  "noHourlyData": "प्रति घंटा डेटा नहीं",
+  "noDailyData": "दैनिक डेटा नहीं",
+  "feelsLike": "महसूस {temp}°",
+  "@feelsLike": {
+    "placeholders": {
+      "temp": {
+        "type": "int"
+      }
+    }
+  },
+  "knowYourSky": "अपने आकाश को जानें",
+  "addAPlace": "स्थान जोड़ें",
+  "searchCity": "शहर खोजें",
+  "noPlacesFound": "कोई स्थान नहीं मिला।",
+  "searchFailed": "खोज असफल। अपना कनेक्शन जांचें।",
+  "settings": "सेटिंग्स",
+  "theme": "थीम",
+  "units": "इकाइयाँ",
+  "language": "भाषा",
+  "systemLanguage": "सिस्टम",
+  "celsiusUnit": "°C",
+  "fahrenheitUnit": "°F",
+  "light": "लाइट",
+  "dark": "डार्क",
+  "weatherUnavailable": "मौसम उपलब्ध नहीं",
+  "locationUnavailable": "स्थान उपलब्ध नहीं",
+  "retry": "पुनः प्रयास",
+  "openSystemSettings": "सिस्टम सेटिंग्स खोलें",
+  "rain": "वर्षा",
+  "minLabel": "न्यू",
+  "maxLabel": "अधि",
+  "threeHourSteps": "3 घंटे के अंतराल",
+  "noHourlyDetail": "इस दिन के लिए प्रति घंटा विवरण नहीं।",
+  "permissionDeniedMessage": "अपना स्थानीय मौसम देखने के लिए Skylo को लोकेशन अनुमति चाहिए।",
+  "permissionPermanentlyDeniedMessage": "Skylo के लिए लोकेशन एक्सेस बंद है। सिस्टम सेटिंग्स → प्राइवेसी और सुरक्षा → लोकेशन सेवाओं में सक्षम करें।",
+  "apiKeyInvalid": "OpenWeatherMap ने API कुंजी अस्वीकार कर दी (401)। कुंजी मान्य है या नहीं जांचें।",
+  "rateLimited": "OpenWeatherMap की सीमा पार हो गई। एक मिनट में फिर कोशिश करें।",
+  "networkError": "OpenWeatherMap से संपर्क नहीं हो सका। अपना कनेक्शन जांचें।"
+}

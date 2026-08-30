@@ -25,6 +25,7 @@
   "theme": "Temă",
   "units": "Unități",
   "language": "Limbă",
+  "systemLanguage": "SISTEM",
   "celsiusUnit": "°C",
   "fahrenheitUnit": "°F",
   "light": "LUMINOS",
