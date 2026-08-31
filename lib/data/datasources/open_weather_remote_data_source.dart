@@ -44,6 +44,8 @@ class OpenWeatherRemoteDataSource {
     final forecast = await _get(_forecastUrl, lat, lon, lang);
 
     final merged = mergeToOnecallShape(current, forecast);
+    // Stamp the fetch time so the app can tell how fresh the snapshot is.
+    merged['observed_at'] = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     debugPrint('[Skylo] Weather fetched: ${merged['timezone'] ?? '?'}');
     return WeatherModel.fromJson(merged);
   }
@@ -84,10 +86,15 @@ class OpenWeatherRemoteDataSource {
     Map<String, dynamic> forecast,
   ) {
     final list = forecast['list'] as List<dynamic>? ?? const [];
-    // The 2.5 endpoints expose the place's UTC offset as `timezone`
-    // (seconds). Both responses agree; prefer the forecast one.
-    final tzOffset = ((forecast['timezone'] as num?) ??
-            (current['timezone'] as num?) ?? 0)
+    // The 2.5 forecast endpoint exposes the place's UTC offset only at
+    // city.timezone; /weather exposes it top-level. Try both before
+    // defaulting to 0 (UTC) — a wrong offset shifts every displayed
+    // time to the wrong wall clock.
+    final city = forecast['city'] as Map<String, dynamic>?;
+    final tzOffset = ((city?['timezone'] as num?) ??
+            (forecast['timezone'] as num?) ??
+            (current['timezone'] as num?) ??
+            0)
         .toInt();
 
     final hourly = list

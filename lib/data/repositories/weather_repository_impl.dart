@@ -89,6 +89,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
       daily: weather.daily,
       lat: lat ?? weather.lat,
       lon: lon ?? weather.lon,
+      observedAt: weather.observedAt,
     );
   }
 }

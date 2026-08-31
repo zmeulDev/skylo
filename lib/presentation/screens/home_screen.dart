@@ -119,6 +119,12 @@ class _PlacePage extends ConsumerWidget {
     final weatherAsync = ref.watch(placeWeatherProvider(place));
 
     return weatherAsync.when(
+      // Refresh in place: keep the previous weather on screen while the
+      // new snapshot downloads (and even if that download fails), so a
+      // background refresh never blanks the page.
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      skipError: true,
       loading: () => const WeatherSkeleton(),
       error: (error, _) => _ErrorView(
         error: error,

@@ -7,7 +7,8 @@ import 'package:skylo/domain/entities/weather_alert.dart';
 abstract class AlertTexts {
   String headline(WeatherAlertKind kind);
 
-  /// e.g. "at 15:00" — caller formats the time phrase.
+  /// e.g. "at 15:00" or "tomorrow at 06:00" — the caller formats the
+  /// time (and day, when the slot is not today) phrase.
   String whenPhrase(DateTime time);
 
   /// e.g. "up to 34°".

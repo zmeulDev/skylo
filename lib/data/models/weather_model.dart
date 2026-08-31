@@ -18,6 +18,7 @@ class WeatherModel extends WeatherEntity {
     required super.daily,
     super.lat,
     super.lon,
+    super.observedAt,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
@@ -89,6 +90,11 @@ class WeatherModel extends WeatherEntity {
       daily: daily,
       lat: (json['lat'] as num?)?.toDouble(),
       lon: (json['lon'] as num?)?.toDouble(),
+      observedAt: json['observed_at'] is num
+          ? DateTime.fromMillisecondsSinceEpoch(
+              ((json['observed_at'] as num) * 1000).toInt(),
+              isUtc: true)
+          : null,
     );
   }
 

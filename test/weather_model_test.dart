@@ -151,4 +151,88 @@ void main() {
       expect((day['weather'] as List).first, isNotNull);
     }
   });
+
+  test('merge reads UTC offset from city.timezone (forecast 2.5 shape)',
+      () {
+    // Real /forecast payloads carry the offset at city.timezone —
+    // there is no top-level `timezone` field on that endpoint.
+    final forecast = {
+      'city': {'timezone': 10800},
+      'list': [
+        {
+          'dt': 1750000000,
+          'main': {'temp': 20.0, 'temp_min': 19.0, 'temp_max': 21.0},
+          'pop': 0,
+          'weather': [
+            {'id': 800, 'main': 'Clear'},
+          ],
+        },
+      ],
+    };
+    final current = {
+      'name': 'Cluj-Napoca',
+      'dt': 1750000000,
+      'timezone': 10800,
+      'main': {'temp': 21.5, 'feels_like': 20.9},
+      'weather': [
+        {'id': 800, 'main': 'Clear'},
+      ],
+    };
+
+    final merged =
+        OpenWeatherRemoteDataSource.mergeToOnecallShape(current, forecast);
+    expect(merged['timezone_offset'], 10800);
+  });
+
+  test('merge falls back to current.timezone when city.timezone is absent',
+      () {
+    final forecast = {
+      'list': [
+        {
+          'dt': 1750000000,
+          'main': {'temp': 20.0, 'temp_min': 19.0, 'temp_max': 21.0},
+          'pop': 0,
+          'weather': [
+            {'id': 800, 'main': 'Clear'},
+          ],
+        },
+      ],
+    };
+    final current = {
+      'name': 'Cluj-Napoca',
+      'dt': 1750000000,
+      'timezone': 7200,
+      'main': {'temp': 21.5, 'feels_like': 20.9},
+      'weather': [
+        {'id': 800, 'main': 'Clear'},
+      ],
+    };
+
+    final merged =
+        OpenWeatherRemoteDataSource.mergeToOnecallShape(current, forecast);
+    expect(merged['timezone_offset'], 7200);
+  });
+
+  test('observed_at stamps and parses as UTC', () {
+    final nowSec = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+    final merged = OpenWeatherRemoteDataSource.mergeToOnecallShape(
+        currentJson, forecastJson);
+    merged['observed_at'] = nowSec;
+
+    final model = WeatherModel.fromJson(merged);
+    expect(model.observedAt, isNotNull);
+    expect(model.observedAt!.toUtc().millisecondsSinceEpoch ~/ 1000, nowSec);
+    // Freshly-stamped data is never older than a minute.
+    expect(model.olderThan(const Duration(minutes: 1)), isFalse);
+    // Data stamped an hour ago is stale.
+    final stale =
+        WeatherModel.fromJson({...merged, 'observed_at': nowSec - 3600});
+    expect(stale.olderThan(const Duration(minutes: 15)), isTrue);
+  });
+
+  test('data without observed_at never counts as stale', () {
+    final model = WeatherModel.fromJson(onecallJson);
+    expect(model.observedAt, isNull);
+    expect(model.olderThan(const Duration(seconds: 1)), isFalse);
+  });
 }

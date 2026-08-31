@@ -144,4 +144,76 @@ void main() {
     ]);
     expect(AlertEvaluator.evaluate(weather, texts), isEmpty);
   });
+
+  test('rain slot on tomorrow\'s calendar day gets a day-aware phrase', () {
+    // Reproduces the 08:20-local user report: the first rain slot in
+    // the 24h window belongs to tomorrow (e.g. 06:00), so callers must
+    // be able to label it "tomorrow", not a bare time that reads as
+    // a slot that already passed today. Entity times are wall-clock
+    // in the place's zone, so give the entity the machine's offset to
+    // keep wall clocks aligned in the test.
+    final machineOffset =
+        DateTime.now().timeZoneOffset.inSeconds;
+    final now = DateTime.now();
+    final tomorrowSixAm =
+        DateTime(now.year, now.month, now.day, 6).add(const Duration(days: 1));
+    // Between 00:00 and 06:00 local, tomorrow's 06:00 is more than 24h
+    // out and legitimately outside the window.
+    if (!tomorrowSixAm.difference(now).isNegative &&
+        tomorrowSixAm.difference(now).inHours >= 24) {
+      return;
+    }
+    final weather = _weather(
+      timeZoneOffsetSeconds: machineOffset,
+      hourly: [
+        HourlyForecast(
+          time: tomorrowSixAm,
+          temp: 18,
+          weatherCode: 500,
+          precipitationProbability: 70,
+        ),
+      ],
+    );
+
+    DateTime? captured;
+    final texts =
+        _PhraseCapturingTexts(onWhen: (time) => captured = time);
+    final alerts = AlertEvaluator.evaluate(weather, texts);
+
+    expect(alerts.map((a) => a.kind), contains(WeatherAlertKind.rain));
+    // The rain alert carries tomorrow's slot, and its calendar day is
+    // not today — the caller can (and the app does) label it
+    // "tomorrow".
+    expect(captured, isNotNull);
+    expect(captured!.hour, 6);
+    // The slot is on a later calendar day than today (month-safe).
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+    expect(captured!.difference(todayMidnight).inDays, greaterThanOrEqualTo(1));
+  });
+}
+
+class _PhraseCapturingTexts implements AlertTexts {
+  _PhraseCapturingTexts({required this.onWhen});
+  final void Function(DateTime time) onWhen;
+
+  @override
+  String headline(WeatherAlertKind kind) => kind.name;
+
+  @override
+  String whenPhrase(DateTime time) {
+    onWhen(time);
+    return '${time.hour}:00';
+  }
+
+  @override
+  String tempPhrase(double celsius) => '${celsius.round()}°';
+
+  @override
+  String gustPhrase(double ms) => '${ms.round()} m/s';
+
+  @override
+  String uvPhrase(double uv) => 'UV ${uv.round()}';
+
+  @override
+  String aqiPhrase(int aqi) => 'AQI $aqi';
 }

@@ -14,6 +14,10 @@ class WeatherEntity {
   final double? lat;
   final double? lon;
 
+  /// When this snapshot was fetched (UTC). Null for legacy/test payloads;
+  /// treated as "just fetched" so such data never looks stale.
+  final DateTime? observedAt;
+
   const WeatherEntity({
     required this.currentTemp,
     required this.feelsLikeTemp,
@@ -26,7 +30,15 @@ class WeatherEntity {
     required this.daily,
     this.lat,
     this.lon,
+    this.observedAt,
   });
+
+  /// Age of this snapshot. Data without a timestamp never counts as stale.
+  bool olderThan(Duration maxAge) {
+    final at = observedAt;
+    if (at == null) return false;
+    return DateTime.now().toUtc().difference(at) > maxAge;
+  }
 
   double tempIn(WeatherUnits units) =>
       units.convertTemp(currentTemp);
