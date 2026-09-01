@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_wordmark">SKYLO</string>
+    <string name="widget_condition">Current conditions</string>
+    <string name="widget_empty_title">No weather yet</string>
+    <string name="widget_empty_message">Open Skylo once to fill this widget.</string>
+</resources>

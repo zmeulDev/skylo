@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:skylo/data/datasources/notification_service.dart';
 import 'package:skylo/domain/entities/daily_forecast.dart';
 import 'package:skylo/domain/entities/hourly_forecast.dart';
 import 'package:skylo/domain/entities/saved_place.dart';
@@ -19,6 +20,7 @@ import 'package:skylo/presentation/widgets/place_tabs.dart';
 import 'package:skylo/presentation/widgets/section_label.dart';
 import 'package:skylo/presentation/widgets/theme_toggle.dart';
 import 'package:skylo/presentation/widgets/weather_glyph.dart';
+import 'package:skylo/presentation/providers/widget_snapshot_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +34,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _page = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Notification tap → jump to that place's page. The service calls
+    // this whenever a notification is opened while the app runs.
+    NotificationService.onNotificationTap = _onNotificationTap;
+  }
+
+  void _onNotificationTap(String placeId) {
+    final places = ref.read(savedPlacesProvider);
+    final index = places.indexWhere((p) => p.id == placeId);
+    if (index < 0 || index == _page) return;
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
   void dispose() {
+    NotificationService.onNotificationTap = null;
     _pageController.dispose();
     super.dispose();
   }
@@ -78,7 +100,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: places.length,
-                onPageChanged: (i) => setState(() => _page = i),
+                onPageChanged: (i) {
+                  setState(() => _page = i);
+                  // Home-screen widget mirrors the last-viewed page.
+                  ref.read(currentViewedPlaceProvider.notifier).state =
+                      places[i];
+                },
                 itemBuilder: (context, i) {
                   return AnimatedBuilder(
                     animation: _pageController,
@@ -313,8 +340,12 @@ class _CurrentBlock extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final units = resolveUnits(
         ref.watch(unitsProvider), Localizations.localeOf(context));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final condition = (weather.conditionDescription.isEmpty
+            ? weather.condition
+            : weather.conditionDescription)
+        .toUpperCase();
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,36 +360,100 @@ class _CurrentBlock extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            WeatherGlyph(weatherCode: weather.weatherCode, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              (weather.conditionDescription.isEmpty
-                      ? weather.condition
-                      : weather.conditionDescription)
-                  .toUpperCase(),
-              style: AppText.tabular(context).copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.2,
-              ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    WeatherGlyph(weatherCode: weather.weatherCode, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: WordSafeText(
+                        text: condition,
+                        style: AppText.tabular(context).copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                WordSafeText(
+                  text: l10n.feelsLike(
+                      units.convertTemp(weather.feelsLikeTemp).round()),
+                  style: AppText.tabular(context).copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 1.2,
+                    color: context.skylo.muted,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 24),
-            Text(
-              l10n.feelsLike(units.convertTemp(weather.feelsLikeTemp).round()),
-              style: AppText.tabular(context).copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 1.2,
-                color: context.skylo.muted,
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );
+  }
+}
+
+/// Text that wraps at word boundaries only. Flutter breaks a word
+/// mid-syllable when the word alone exceeds the column width — a
+/// mis-split word can read as a different one ("CER FRAGM / ENTAT").
+/// Instead: shrink the type (size AND tracking together) until the
+/// longest word fits its own line. No arbitrary floor: an over-wide
+/// word would still break mid-word, which is the one thing we must
+/// never do.
+class WordSafeText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+
+  const WordSafeText({super.key, required this.text, required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final maxWidth = constraints.maxWidth;
+      final words = text.split(RegExp(r'\s+'));
+      final painter = TextPainter(
+          textDirection: Directionality.of(context), maxLines: 1);
+
+      double widthOf(String word, TextStyle s) {
+        painter.text = TextSpan(text: word, style: s);
+        painter.layout();
+        return painter.width;
+      }
+
+      final longestWord =
+          words.reduce((a, b) => a.length >= b.length ? a : b);
+      TextStyle sized = style;
+      if (widthOf(longestWord, sized) > maxWidth) {
+        // Shrink size and tracking together until the longest word
+        // fits its own line. No arbitrary floor: an over-wide word
+        // would still break mid-word, which we must never do.
+        var guard = 0;
+        while (widthOf(longestWord, sized) > maxWidth && guard < 20) {
+          final s = sized.fontSize! * 0.9;
+          sized = sized.copyWith(
+              fontSize: s, letterSpacing: (sized.letterSpacing ?? 0) * 0.9);
+          guard++;
+        }
+      }
+      return Text(
+        text,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        style: sized,
+      );
+    });
   }
 }
 

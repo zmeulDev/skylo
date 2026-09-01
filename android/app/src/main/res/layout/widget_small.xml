@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Skylo widget, small cell: place, big temp, condition. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/widget_surface"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/wordmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="@string/widget_wordmark"
+        android:fontFamily="@font/inter_semibold"
+        android:textSize="10sp"
+        android:letterSpacing="0.3"
+        android:textColor="@color/widget_ink" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_extra_light"
+            android:textSize="52sp"
+            android:includeFontPadding="false"
+            android:textColor="@color/widget_ink"
+            tools:text="21" />
+
+        <TextView
+            android:id="@+id/temp_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/inter_regular"
+            android:textSize="16sp"
+            android:textColor="@color/widget_accent"
+            tools:text="°C" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semibold"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink"
+            tools:text="Cluj-Napoca" />
+
+        <ImageView
+            android:id="@+id/condition_glyph"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@string/widget_condition"
+            tools:src="@drawable/widget_glyph_sun" />
+    </LinearLayout>
+</LinearLayout>

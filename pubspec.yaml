@@ -43,6 +43,9 @@ dependencies:
   intl: ^0.20.2
   shared_preferences: ^2.5.5
   geocoding: ^5.0.0
+  flutter_local_notifications: ^22.3.0
+  workmanager: ^0.10.9
+  home_widget: ^0.9.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -54,6 +57,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
+  flutter_driver:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

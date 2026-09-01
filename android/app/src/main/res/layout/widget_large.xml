@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Skylo widget, large cell: medium layout + 5-day outlook list. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/widget_surface"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/wordmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="@string/widget_wordmark"
+        android:fontFamily="@font/inter_semibold"
+        android:textSize="10sp"
+        android:letterSpacing="0.3"
+        android:textColor="@color/widget_ink" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_extra_light"
+            android:textSize="52sp"
+            android:includeFontPadding="false"
+            android:textColor="@color/widget_ink"
+            tools:text="21" />
+
+        <TextView
+            android:id="@+id/temp_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/inter_regular"
+            android:textSize="16sp"
+            android:textColor="@color/widget_accent"
+            tools:text="°C" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semibold"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink"
+            tools:text="Cluj-Napoca" />
+
+        <ImageView
+            android:id="@+id/condition_glyph"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@string/widget_condition"
+            tools:src="@drawable/widget_glyph_sun" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/widget_hairline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout style="@style/WidgetHourSlot">
+            <TextView android:id="@+id/h0_time" style="@style/WidgetHourTime" tools:text="15" />
+            <ImageView android:id="@+id/h0_glyph" style="@style/WidgetHourGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/h0_temp" style="@style/WidgetHourTemp" tools:text="22°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetHourSlot">
+            <TextView android:id="@+id/h1_time" style="@style/WidgetHourTime" tools:text="18" />
+            <ImageView android:id="@+id/h1_glyph" style="@style/WidgetHourGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/h1_temp" style="@style/WidgetHourTemp" tools:text="21°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetHourSlot">
+            <TextView android:id="@+id/h2_time" style="@style/WidgetHourTime" tools:text="21" />
+            <ImageView android:id="@+id/h2_glyph" style="@style/WidgetHourGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/h2_temp" style="@style/WidgetHourTemp" tools:text="19°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetHourSlot">
+            <TextView android:id="@+id/h3_time" style="@style/WidgetHourTime" tools:text="00" />
+            <ImageView android:id="@+id/h3_glyph" style="@style/WidgetHourGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/h3_temp" style="@style/WidgetHourTemp" tools:text="17°" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/widget_hairline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp">
+
+        <LinearLayout style="@style/WidgetDayRow">
+            <TextView android:id="@+id/d0_label" style="@style/WidgetDayLabel" android:textStyle="bold" tools:text="Today" />
+            <ImageView android:id="@+id/d0_glyph" style="@style/WidgetDayGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/d0_min" style="@style/WidgetDayMin" tools:text="16°" />
+            <TextView android:id="@+id/d0_max" style="@style/WidgetDayMax" android:textStyle="bold" tools:text="26°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetDayRow">
+            <TextView android:id="@+id/d1_label" style="@style/WidgetDayLabel" tools:text="Tomorrow" />
+            <ImageView android:id="@+id/d1_glyph" style="@style/WidgetDayGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/d1_min" style="@style/WidgetDayMin" tools:text="17°" />
+            <TextView android:id="@+id/d1_max" style="@style/WidgetDayMax" tools:text="27°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetDayRow">
+            <TextView android:id="@+id/d2_label" style="@style/WidgetDayLabel" tools:text="Friday" />
+            <ImageView android:id="@+id/d2_glyph" style="@style/WidgetDayGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/d2_min" style="@style/WidgetDayMin" tools:text="18°" />
+            <TextView android:id="@+id/d2_max" style="@style/WidgetDayMax" tools:text="28°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetDayRow">
+            <TextView android:id="@+id/d3_label" style="@style/WidgetDayLabel" tools:text="Saturday" />
+            <ImageView android:id="@+id/d3_glyph" style="@style/WidgetDayGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/d3_min" style="@style/WidgetDayMin" tools:text="19°" />
+            <TextView android:id="@+id/d3_max" style="@style/WidgetDayMax" tools:text="29°" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/WidgetDayRow">
+            <TextView android:id="@+id/d4_label" style="@style/WidgetDayLabel" tools:text="Sunday" />
+            <ImageView android:id="@+id/d4_glyph" style="@style/WidgetDayGlyph"
+                android:contentDescription="@string/widget_condition" tools:src="@drawable/widget_glyph_sun" />
+            <TextView android:id="@+id/d4_min" style="@style/WidgetDayMin" tools:text="20°" />
+            <TextView android:id="@+id/d4_max" style="@style/WidgetDayMax" tools:text="30°" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

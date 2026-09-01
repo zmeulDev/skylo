@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skylo/data/datasources/debug_notifications.dart';
 import 'package:skylo/domain/entities/weather_entity.dart';
 import 'package:skylo/l10n/app_localizations.dart';
 import 'package:skylo/presentation/providers/alerts_settings_provider.dart';
@@ -115,6 +116,15 @@ class _SettingsSheet extends ConsumerWidget {
                 showLanguageSheet(context);
               },
             ),
+            if (kSkyloDebugNotifications) ...[
+              const SizedBox(height: 12),
+              _SettingsRow(
+                icon: Icons.bolt_outlined,
+                title: 'TEST NOTIFICATIONS',
+                trailing: const SizedBox.shrink(),
+                onTap: postDebugNotifications,
+              ),
+            ],
           ],
         ),
       ),

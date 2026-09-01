@@ -11,6 +11,8 @@ class _Texts implements AlertTexts {
   @override
   String whenPhrase(DateTime time) => '${time.hour}:00';
   @override
+  String dayPhrase(DateTime time) => 'that day';
+  @override
   String tempPhrase(double celsius) => '${celsius.round()}°';
   @override
   String gustPhrase(double ms) => '${ms.round()} m/s';
@@ -145,6 +147,52 @@ void main() {
     expect(AlertEvaluator.evaluate(weather, texts), isEmpty);
   });
 
+  test('hot day beyond the window does not raise a heat alert', () {
+    // Reproduces the on-device report: 28° now, a 33° daily max four
+    // days out — the old code alerted "now — 33°" from a day bucket
+    // outside the 24h window.
+    final hotFarDay = DailyForecast(
+      date: DateTime.now().add(const Duration(days: 4)),
+      maxTemp: 33,
+      minTemp: 20,
+      weatherCode: 800,
+    );
+    final weather = _weather(hourly: [h(1, temp: 27)], daily: [hotFarDay]);
+    expect(AlertEvaluator.evaluate(weather, texts), isEmpty);
+  });
+
+  test('daily max within the window raises heat alert with hourly slot', () {
+    final today = DailyForecast(
+      date: DateTime.now(),
+      maxTemp: 31,
+      minTemp: 18,
+      weatherCode: 800,
+    );
+    final weather = _weather(hourly: [h(1, temp: 27)], daily: [today]);
+    final alerts = AlertEvaluator.evaluate(weather, texts);
+    expect(alerts.map((a) => a.kind), contains(WeatherAlertKind.heat));
+    // The detail quotes the peak hour actually in the window, never
+    // "now": a same-day 31° bucket with a 27° hourly peak reads as
+    // "14:00 — 27°" until an hourly sample tops it.
+    final heat = alerts.firstWhere((a) => a.kind == WeatherAlertKind.heat);
+    expect(heat.severe, isFalse); // 31 < 32 severe bar
+    expect(heat.detail, contains('27°'));
+  });
+
+  test('hourly peak above daily max wins and carries its own time', () {
+    final today = DailyForecast(
+      date: DateTime.now(),
+      maxTemp: 29,
+      minTemp: 18,
+      weatherCode: 800,
+    );
+    final weather = _weather(hourly: [h(2, temp: 34)], daily: [today]);
+    final alerts = AlertEvaluator.evaluate(weather, texts);
+    final heat = alerts.firstWhere((a) => a.kind == WeatherAlertKind.heat);
+    expect(heat.severe, isTrue); // 34 >= 32
+    expect(heat.detail, contains('34°'));
+  });
+
   test('rain slot on tomorrow\'s calendar day gets a day-aware phrase', () {
     // Reproduces the 08:20-local user report: the first rain slot in
     // the 24h window belongs to tomorrow (e.g. 06:00), so callers must
@@ -204,6 +252,8 @@ class _PhraseCapturingTexts implements AlertTexts {
     onWhen(time);
     return '${time.hour}:00';
   }
+  @override
+  String dayPhrase(DateTime time) => 'that day';
 
   @override
   String tempPhrase(double celsius) => '${celsius.round()}°';

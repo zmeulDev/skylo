@@ -2,6 +2,8 @@
 # Builds & runs the app with local secrets from .env.
 # Usage: ./run.sh [device-id] [extra flutter args...]
 # Example: ./run.sh RZGYB1E58CV --release
+# Add SKYLO_DEBUG_NOTIFICATIONS=true to .env for the settings-sheet
+# notification test row (never ship this in release builds).
 set -euo pipefail
 
 if [ ! -f .env ]; then

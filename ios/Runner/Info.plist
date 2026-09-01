@@ -22,6 +22,18 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<!-- Home-screen widget tap: home_widget routes skylo:// launches. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.zmeul.skylo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>skylo</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -49,6 +61,15 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Skylo needs your location to show the weather for where you are.</string>
+	<!-- Weather alert background check (workmanager BGAppRefreshTask). -->
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>skylo.alertCheck.unique</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

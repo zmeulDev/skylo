@@ -11,6 +11,10 @@ abstract class AlertTexts {
   /// time (and day, when the slot is not today) phrase.
   String whenPhrase(DateTime time);
 
+  /// Day-only label for extremes whose exact hour is unknown (daily
+  /// buckets): "today" / "tomorrow".
+  String dayPhrase(DateTime time);
+
   /// e.g. "up to 34°".
   String tempPhrase(double celsius);
 
@@ -137,15 +141,26 @@ abstract final class AlertEvaluator {
           troughTime = h.time;
         }
       }
-      final dayMax = _dailyMax(weather);
-      final dayMin = _dailyMin(weather);
+      // Daily buckets whose calendar day intersects the window can
+      // carry an hourly peak the 3-hourly samples miss; take them
+      // into account, but only within the window — a hot day four
+      // days out must not raise today's alert.
+      final windowDays = weather.daily
+          .where((d) => d.date.isBefore(windowEnd))
+          .toList();
+      final dayMax = windowDays.isEmpty
+          ? double.negativeInfinity
+          : windowDays.map((d) => d.maxTemp).reduce((a, b) => a >= b ? a : b);
+      final dayMin = windowDays.isEmpty
+          ? double.infinity
+          : windowDays.map((d) => d.minTemp).reduce((a, b) => a <= b ? a : b);
       if (peak >= heatWatch || dayMax >= heatWatch) {
         final top = peak >= dayMax ? peak : dayMax;
         alerts.add(WeatherAlert(
           kind: WeatherAlertKind.heat,
           headline: texts.headline(WeatherAlertKind.heat),
           detail:
-              '${texts.whenPhrase(top == peak ? peakTime : now)} — ${texts.tempPhrase(top)}',
+              '${texts.whenPhrase(peakTime)} — ${texts.tempPhrase(peak)}',
           severe: top >= heatSevere,
         ));
       } else if (trough <= coldWatch || dayMin <= coldWatch) {
@@ -154,7 +169,7 @@ abstract final class AlertEvaluator {
           kind: WeatherAlertKind.cold,
           headline: texts.headline(WeatherAlertKind.cold),
           detail:
-              '${texts.whenPhrase(bottom == trough ? troughTime : now)} — ${texts.tempPhrase(bottom)}',
+              '${texts.whenPhrase(troughTime)} — ${texts.tempPhrase(bottom)}',
           severe: bottom <= coldSevere,
         ));
       }
@@ -189,12 +204,4 @@ abstract final class AlertEvaluator {
         .map((e) => e.precipitationProbability)
         .reduce((a, b) => a >= b ? a : b);
   }
-
-  static double _dailyMax(WeatherEntity weather) => weather.daily.isEmpty
-      ? double.negativeInfinity
-      : weather.daily.map((d) => d.maxTemp).reduce((a, b) => a >= b ? a : b);
-
-  static double _dailyMin(WeatherEntity weather) => weather.daily.isEmpty
-      ? double.infinity
-      : weather.daily.map((d) => d.minTemp).reduce((a, b) => a <= b ? a : b);
 }

@@ -57,6 +57,10 @@ class _Texts implements AlertTexts {
   String get _tomorrowLabel =>
       lookupAppLocalizations(locale).tomorrow.toLowerCase();
 
+  /// Localized "Today".
+  String get todayLabel =>
+      lookupAppLocalizations(locale).today.toLowerCase();
+
   /// Whether [time] falls on a later calendar day than the place's
   /// local "today" — drives the "tomorrow" qualifier.
   bool _isTomorrow(DateTime time) {
@@ -76,6 +80,10 @@ class _Texts implements AlertTexts {
     if (_isTomorrow(time)) return '$_tomorrowLabel $hh:$mm';
     return '$hh:$mm';
   }
+
+  @override
+  String dayPhrase(DateTime time) =>
+      _isTomorrow(time) ? _tomorrowLabel : todayLabel;
 
   @override
   String tempPhrase(double celsius) => '${celsius.round()}°';
